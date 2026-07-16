@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(
     page_title="Admin Dashboard",
     page_icon="⚙️",
-    layout="wide"
+    layout="centered"
 )
 
 st.title("⚙️ Admin Dashboard")
@@ -93,27 +93,27 @@ st.markdown("---")
 
 st.subheader("📊 Hiring Status")
 
-fig = plt.figure(figsize=(5,5))
+fig, ax = plt.subplots(figsize=(4,4), dpi=80)
 
 if prediction == "Selected":
-
-    values = [1,0]
-
+    values = [1, 0]
 else:
+    values = [0, 1]
 
-    values = [0,1]
-
-plt.pie(
-
+ax.pie(
     values,
-
-    labels=["Selected","Rejected"],
-
-    autopct="%1.0f%%"
-
+    labels=["Selected", "Rejected"],
+    autopct="%1.0f%%",
+    startangle=90
 )
 
-st.pyplot(fig)
+ax.axis("equal")
+
+plt.tight_layout()
+
+st.pyplot(fig, clear_figure=True)
+
+plt.close(fig)
 
 st.markdown("---")
 
