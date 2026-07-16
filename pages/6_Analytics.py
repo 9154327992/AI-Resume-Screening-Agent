@@ -89,22 +89,31 @@ st.markdown("---")
 
 st.subheader("📈 Match Score")
 
-fig, ax = plt.subplots(figsize=(4, 3))
+fig, ax = plt.subplots(figsize=(4,3))
 
 score = analysis["Match Score"]
 
 ax.bar(
-    ["Match Score"],
+    [0],
     [score],
-    width=0.4
+    width=0.3
 )
 
-ax.set_ylim(0, 100)
+ax.set_xticks([0])
+ax.set_xticklabels(["Match Score"])
+
+ax.set_ylim(0,100)
 ax.set_ylabel("Score (%)")
 ax.set_title("Candidate Match Score")
 
-for i, v in enumerate([score]):
-    ax.text(i, v + 2, f"{v}%", ha="center", fontsize=10)
+ax.text(
+    0,
+    score + 2,
+    f"{score}%",
+    ha="center",
+    fontsize=10,
+    fontweight="bold"
+)
 
 st.pyplot(fig, use_container_width=False)
 plt.close(fig)
@@ -117,17 +126,20 @@ st.markdown("---")
 
 st.subheader("📉 Experience")
 
-fig, ax = plt.subplots(figsize=(4, 3))
+fig, ax = plt.subplots(figsize=(4,3))
 
 experience = candidate["Experience"]
 
 ax.bar(
-    ["Experience"],
+    [0],
     [experience],
-    width=0.4
+    width=0.3
 )
 
-ax.set_ylim(0, 10)  # Adjust if your dataset contains higher experience values
+ax.set_xticks([0])
+ax.set_xticklabels(["Experience"])
+
+ax.set_ylim(0, max(5, experience + 2))
 ax.set_ylabel("Years")
 ax.set_title("Candidate Experience")
 
@@ -136,7 +148,8 @@ ax.text(
     experience + 0.2,
     f"{experience} Years",
     ha="center",
-    fontsize=10
+    fontsize=10,
+    fontweight="bold"
 )
 
 st.pyplot(fig, use_container_width=False)
