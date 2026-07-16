@@ -60,20 +60,25 @@ st.markdown("---")
 
 st.subheader("📊 Prediction Distribution")
 
-fig, ax = plt.subplots(figsize=(4,4), dpi=80)
+fig, ax = plt.subplots(figsize=(3, 3))
+
+if prediction == "Selected":
+    values = [100, 0.001]   # Selected, Rejected
+else:
+    values = [0.001, 100]
 
 ax.pie(
-    [1, 0] if prediction == "Selected" else [0, 1],
+    values,
     labels=["Selected", "Rejected"],
     autopct="%1.0f%%",
-    startangle=90
+    startangle=0,
+    counterclock=False,
+    radius=0.8
 )
 
-ax.axis("equal")
-plt.tight_layout()
+ax.set_aspect("equal")
 
-st.pyplot(fig, clear_figure=True)
-
+st.pyplot(fig, use_container_width=False)
 plt.close(fig)
 
 st.markdown("---")
