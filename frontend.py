@@ -43,8 +43,6 @@ st.sidebar.title("AI Resume Screening Agent")
 
 st.sidebar.markdown("---")
 
-st.sidebar.markdown("---")
-
 st.sidebar.write("Version 1.0")
 
 # ----------------------------------------------------------
