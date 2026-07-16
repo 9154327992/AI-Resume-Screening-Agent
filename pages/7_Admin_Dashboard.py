@@ -96,15 +96,15 @@ st.subheader("📊 Hiring Status")
 fig, ax = plt.subplots(figsize=(3, 3))
 
 if prediction == "Selected":
-    values = [100, 0.001]    
+    values = [100, 0.001]     
 else:
-    values = [0.001, 100]      
+    values = [0.001, 100]     
 
 ax.pie(
     values,
     labels=["Selected", "Rejected"],
     autopct="%1.0f%%",
-    startangle=180,      
+    startangle=0,        
     counterclock=False,
     radius=0.8
 )
