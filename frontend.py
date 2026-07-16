@@ -83,7 +83,7 @@ with col2:
 
     st.image(
         "https://img.icons8.com/color/480/artificial-intelligence.png",
-        use_container_width=True
+        use_container_width=280
     )
 
 st.markdown("---")
