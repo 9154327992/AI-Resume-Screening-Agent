@@ -60,19 +60,21 @@ st.markdown("---")
 
 st.subheader("📊 Prediction Distribution")
 
-fig = plt.figure(figsize=(5,5))
+fig, ax = plt.subplots(figsize=(4,4), dpi=80)
 
-plt.pie(
-
-    [1,0] if prediction=="Selected" else [0,1],
-
-    labels=["Selected","Rejected"],
-
-    autopct="%1.0f%%"
-
+ax.pie(
+    [1, 0] if prediction == "Selected" else [0, 1],
+    labels=["Selected", "Rejected"],
+    autopct="%1.0f%%",
+    startangle=90
 )
 
-st.pyplot(fig)
+ax.axis("equal")
+plt.tight_layout()
+
+st.pyplot(fig, clear_figure=True)
+
+plt.close(fig)
 
 st.markdown("---")
 
@@ -82,19 +84,23 @@ st.markdown("---")
 
 st.subheader("📈 Match Score")
 
-fig = plt.figure(figsize=(6,4))
+fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
 
-plt.bar(
-
+ax.bar(
     ["Match Score"],
-
-    [analysis["Match Score"]]
-
+    [analysis["Match Score"]],
+    width=0.4
 )
 
-plt.ylim(0,100)
+ax.set_ylim(0, 100)
+ax.set_ylabel("Score (%)")
+ax.set_title("Resume Match Score")
 
-st.pyplot(fig)
+plt.tight_layout()
+
+st.pyplot(fig, clear_figure=True)
+
+plt.close(fig)
 
 st.markdown("---")
 
@@ -104,17 +110,23 @@ st.markdown("---")
 
 st.subheader("📉 Experience")
 
-fig = plt.figure(figsize=(6,4))
+fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
 
-plt.bar(
-
+ax.bar(
     ["Experience"],
-
-    [candidate["Experience"]]
-
+    [candidate["Experience"]],
+    width=0.4
 )
 
-st.pyplot(fig)
+ax.set_ylabel("Years")
+ax.set_ylim(0, max(candidate["Experience"] + 1, 5))
+ax.set_title("Candidate Experience")
+
+plt.tight_layout()
+
+st.pyplot(fig, clear_figure=True)
+
+plt.close(fig)
 
 st.markdown("---")
 
