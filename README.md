@@ -281,27 +281,25 @@ pip install -r requirements.txt
 
 ***Run the Backend:***
 
-bash
-
+```bash
 python -m uvicorn backend:app --reload
+```
 
+**Backend URL**
 
-Backend URL
-
-https://ai-resume-screening-agent-s1uy.onrender.com/
+https://ai-resume-screening-agent-s1uy.onrender.com
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
 ***Run the Frontend:***
 
-bash
-
+```bash
 python -m streamlit run frontend.py
+```
 
+**Frontend URL**
 
-Frontend URL
-
-http://localhost:8501
+https://ai-resume-screening-agent-5qelmahqvbzuss8ru9jxmt.streamlit.app
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
