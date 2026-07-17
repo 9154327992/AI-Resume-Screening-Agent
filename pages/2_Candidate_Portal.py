@@ -1472,3 +1472,216 @@ else:
 
 st.markdown("---")
 
+# ==========================================================
+# AI Resume Assistant
+# ==========================================================
+
+# ----------------------------------------------------------
+# AI Resume Assistant Section
+# ----------------------------------------------------------
+
+st.subheader("🤖 AI Resume Assistant")
+
+st.write("""
+Generate an AI-powered resume assessment based on your uploaded
+resume. The assistant provides a resume summary, match score,
+skill gap analysis, interview questions, HR recommendation,
+and a sample recruitment email.
+""")
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Generate AI Analysis Button
+# ----------------------------------------------------------
+
+generate_ai = st.button(
+    "🧠 Generate AI Analysis",
+    use_container_width=True,
+    type="primary",
+    disabled=st.session_state.uploaded_file is None
+)
+
+# ----------------------------------------------------------
+# Generate AI Analysis
+# ----------------------------------------------------------
+
+if generate_ai:
+
+    uploaded_file = st.session_state.uploaded_file
+
+    try:
+
+        with st.spinner("Generating AI Resume Analysis..."):
+
+            files = {
+                "file": (
+                    uploaded_file.name,
+                    uploaded_file.getvalue(),
+                    uploaded_file.type
+                )
+            }
+
+            response = requests.post(
+                f"{API_BASE_URL}/ai_resume_analysis",
+                files=files,
+                timeout=120
+            )
+
+            if response.status_code == 200:
+
+                ai_result = response.json()
+
+                st.session_state.ai_result = ai_result
+
+                st.success("✅ AI Resume Analysis Generated Successfully.")
+
+            else:
+
+                st.error(
+                    f"Backend Error : {response.status_code}"
+                )
+
+                st.write(response.text)
+
+    except Exception as e:
+
+        st.exception(e)
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Display AI Analysis
+# ----------------------------------------------------------
+
+if "ai_result" in st.session_state:
+
+    analysis = st.session_state.ai_result.get(
+        "AI Analysis",
+        {}
+    )
+
+    # ------------------------------------------------------
+    # Resume Summary
+    # ------------------------------------------------------
+
+    st.subheader("📄 Resume Summary")
+
+    st.info(
+        analysis.get(
+            "Resume Summary",
+            "Not Available"
+        )
+    )
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Match Score
+    # ------------------------------------------------------
+
+    st.subheader("🎯 Resume Match Score")
+
+    score = analysis.get(
+        "Match Score",
+        0
+    )
+
+    st.metric(
+        "Match Score",
+        f"{score}%"
+    )
+
+    st.progress(score / 100)
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Skill Gap Analysis
+    # ------------------------------------------------------
+
+    st.subheader("📉 Skill Gap Analysis")
+
+    gaps = analysis.get(
+        "Skill Gap",
+        []
+    )
+
+    if gaps:
+
+        for skill in gaps:
+
+            st.warning(f"Missing Skill : {skill}")
+
+    else:
+
+        st.success("No Skill Gaps Found")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Interview Questions
+    # ------------------------------------------------------
+
+    st.subheader("💬 Interview Questions")
+
+    questions = analysis.get(
+        "Interview Questions",
+        []
+    )
+
+    for i, question in enumerate(questions, start=1):
+
+        st.info(f"**Q{i}.** {question}")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # HR Recommendation
+    # ------------------------------------------------------
+
+    st.subheader("👨‍💼 HR Recommendation")
+
+    recommendation = analysis.get(
+        "HR Recommendation",
+        "N/A"
+    )
+
+    if recommendation == "Highly Recommended":
+
+        st.success(recommendation)
+
+    elif recommendation == "Recommended":
+
+        st.success(recommendation)
+
+    elif recommendation == "Consider":
+
+        st.warning(recommendation)
+
+    else:
+
+        st.error(recommendation)
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Sample Recruitment Email
+    # ------------------------------------------------------
+
+    st.subheader("📧 Sample Recruitment Email")
+
+    st.code(
+        analysis.get(
+            "Email Draft",
+            "Not Available"
+        )
+    )
+
+else:
+
+    st.info(
+        "Click **Generate AI Analysis** to view AI-powered recommendations."
+    )
+
+st.markdown("---")
