@@ -3,48 +3,1075 @@
 # Candidate Portal
 # ==========================================================
 
+# ----------------------------------------------------------
+# Import Required Libraries
+# ----------------------------------------------------------
+
 import streamlit as st
 import requests
+import pandas as pd
+from io import BytesIO
 
 # ----------------------------------------------------------
-# Page Configuration
+# Configure Streamlit Page
 # ----------------------------------------------------------
 
 st.set_page_config(
     page_title="Candidate Portal",
-    page_icon="👤",
-    layout="wide"
+    page_icon="📄",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-st.title("👤 Candidate Portal")
+# ----------------------------------------------------------
+# Backend API Configuration
+# ----------------------------------------------------------
+
+# FastAPI Backend URL
+# Change this URL if running locally.
+API_BASE_URL = "https://your-render-backend.onrender.com"
+
+# Resume Screening Endpoint
+SCREENING_API = f"{API_BASE_URL}/predict"
+
+# Health Check Endpoint
+HEALTH_API = f"{API_BASE_URL}/health"
+
+# ----------------------------------------------------------
+# Initialize Session State Variables
+# ----------------------------------------------------------
+
+default_session = {
+    "analysis_completed": False,
+    "uploaded_file": None,
+    "candidate_name": "",
+    "candidate_email": "",
+    "candidate_phone": "",
+    "experience": "",
+    "education": "",
+    "job_role": "",
+    "analysis_result": None
+}
+
+for key, value in default_session.items():
+    if key not in st.session_state:
+        st.session_state[key] = value
+
+# ----------------------------------------------------------
+# Apply Custom CSS
+# ----------------------------------------------------------
+
+st.markdown("""
+<style>
+
+/* Main Container */
+.main{
+    padding-top:20px;
+}
+
+/* Section Heading */
+.section-title{
+    font-size:28px;
+    font-weight:bold;
+    color:#2563EB;
+    margin-bottom:15px;
+}
+
+/* Information Card */
+.info-card{
+    background:#FFFFFF;
+    border-radius:12px;
+    padding:20px;
+    border-left:6px solid #2563EB;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.08);
+    margin-bottom:20px;
+}
+
+/* Upload Area */
+.upload-box{
+    background:#F8FAFC;
+    border:2px dashed #2563EB;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+}
+
+/* Result Card */
+.result-card{
+    background:#EFF6FF;
+    border-radius:12px;
+    padding:18px;
+    border-left:6px solid #1D4ED8;
+    margin-bottom:15px;
+}
+
+/* Success Card */
+.success-card{
+    background:#ECFDF5;
+    border-left:6px solid #10B981;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+/* Warning Card */
+.warning-card{
+    background:#FEFCE8;
+    border-left:6px solid #F59E0B;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+/* Metric Styling */
+div[data-testid="metric-container"]{
+    background:#FFFFFF;
+    border:1px solid #E5E7EB;
+    border-radius:12px;
+    padding:15px;
+    box-shadow:0px 3px 8px rgba(0,0,0,0.08);
+}
+
+/* Buttons */
+.stButton>button{
+    width:100%;
+    border-radius:10px;
+    height:50px;
+    font-size:16px;
+    font-weight:bold;
+}
+
+/* File Uploader */
+[data-testid="stFileUploader"]{
+    border:2px dashed #2563EB;
+    border-radius:12px;
+    padding:12px;
+}
+
+/* Horizontal Rule */
+hr{
+    margin-top:25px;
+    margin-bottom:25px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# ==========================================================
+# Candidate Portal Header
+# ==========================================================
+
+# ----------------------------------------------------------
+# Hero Banner
+# ----------------------------------------------------------
+
+st.markdown(
+    """
+    <div style="
+        background: linear-gradient(90deg,#2563EB,#1D4ED8,#1E40AF);
+        padding:35px;
+        border-radius:18px;
+        color:white;
+        text-align:center;
+        margin-bottom:25px;
+    ">
+
+    <h1>📄 Candidate Portal</h1>
+
+    <h4>
+        Upload Your Resume • Get AI Analysis • Improve Your Profile
+    </h4>
+
+    <p style="font-size:18px;">
+        Submit your resume and let our AI-powered Resume Screening Agent
+        evaluate your profile, calculate a resume score, identify skill
+        gaps, and provide personalized recommendations for your chosen
+        job role.
+    </p>
+
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# ----------------------------------------------------------
+# Candidate Portal Overview
+# ----------------------------------------------------------
+
+st.subheader("👋 Welcome Candidate")
+
+st.write("""
+Welcome to the **AI Resume Screening Agent**.
+
+This portal is designed to simplify your job application process by
+analyzing your resume using Artificial Intelligence and Machine
+Learning techniques. After uploading your resume, the system will:
+
+- Extract your resume information
+- Analyze your technical skills
+- Calculate your resume score
+- Predict your suitability
+- Identify missing skills
+- Generate AI recommendations
+- Assist recruiters with hiring decisions
+""")
 
 st.markdown("---")
 
+# ----------------------------------------------------------
+# Resume Upload Guidelines
+# ----------------------------------------------------------
+
+st.subheader("📝 Before You Upload")
+
+guide1, guide2 = st.columns(2)
+
+with guide1:
+
+    st.info("""
+### 📄 Resume Requirements
+
+✔ Upload PDF or DOCX format
+
+✔ Resume should be readable
+
+✔ Include Education
+
+✔ Include Skills
+
+✔ Include Experience
+
+✔ Include Projects (Recommended)
+""")
+
+with guide2:
+
+    st.info("""
+### 💡 Tips for Better Results
+
+✔ Use clear section headings
+
+✔ Mention technical skills
+
+✔ Add certifications
+
+✔ Include internships
+
+✔ List major projects
+
+✔ Keep contact information updated
+""")
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# AI Recruitment Workflow
+# ----------------------------------------------------------
+
+st.subheader("🚀 AI Resume Screening Workflow")
+
+step1, step2, step3, step4 = st.columns(4)
+
+with step1:
+
+    st.success("""
+### ①
+
+📤 Upload Resume
+""")
+
+with step2:
+
+    st.success("""
+### ②
+
+🤖 AI Resume Analysis
+""")
+
+with step3:
+
+    st.success("""
+### ③
+
+📊 Resume Score &
+Skill Analysis
+""")
+
+with step4:
+
+    st.success("""
+### ④
+
+👨‍💼 Recruiter
+Recommendation
+""")
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Application Progress Indicator
+# ----------------------------------------------------------
+
+st.subheader("📌 Recruitment Process")
+
+progress = st.progress(0)
+
+progress_steps = [
+    "Resume Upload",
+    "Resume Parsing",
+    "AI Analysis",
+    "Resume Scoring",
+    "Skill Gap Detection",
+    "Recruiter Recommendation"
+]
+
+for index, step in enumerate(progress_steps, start=1):
+    st.write(f"**Step {index}:** {step}")
+
+progress.progress(15)
+
+st.caption(
+    "Your progress will automatically update after resume analysis."
+)
+
+st.markdown("---")
+
+# ==========================================================
+# Candidate Information
+# ==========================================================
+
+# ----------------------------------------------------------
+# Candidate Information Section
+# ----------------------------------------------------------
+
+st.subheader("👤 Candidate Information")
+
 st.write("""
-Upload your Resume (PDF or DOCX) and let the AI Resume
-Screening Agent analyze your profile automatically.
+Please provide your basic information before uploading your resume.
+The information entered below will be used along with your resume
+during the AI resume screening process.
+""")
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Create Two-Column Layout
+# ----------------------------------------------------------
+
+left_col, right_col = st.columns(2)
+
+# ----------------------------------------------------------
+# Left Column
+# ----------------------------------------------------------
+
+with left_col:
+
+    # Candidate Full Name
+    st.session_state.candidate_name = st.text_input(
+        label="👤 Full Name",
+        value=st.session_state.candidate_name,
+        placeholder="Enter your full name"
+    )
+
+    # Candidate Email Address
+    st.session_state.candidate_email = st.text_input(
+        label="📧 Email Address",
+        value=st.session_state.candidate_email,
+        placeholder="example@email.com"
+    )
+
+    # Candidate Phone Number
+    st.session_state.candidate_phone = st.text_input(
+        label="📱 Phone Number",
+        value=st.session_state.candidate_phone,
+        placeholder="+91 XXXXX XXXXX"
+    )
+
+    # LinkedIn Profile
+    linkedin = st.text_input(
+        label="🔗 LinkedIn Profile (Optional)",
+        placeholder="https://linkedin.com/in/username"
+    )
+
+# ----------------------------------------------------------
+# Right Column
+# ----------------------------------------------------------
+
+with right_col:
+
+    # Years of Experience
+    st.session_state.experience = st.selectbox(
+        label="💼 Years of Experience",
+        options=[
+            "Fresher",
+            "0-1 Years",
+            "1-3 Years",
+            "3-5 Years",
+            "5-8 Years",
+            "8+ Years"
+        ],
+        index=0
+    )
+
+    # Highest Qualification
+    st.session_state.education = st.selectbox(
+        label="🎓 Highest Qualification",
+        options=[
+            "High School",
+            "Diploma",
+            "Bachelor's Degree",
+            "Master's Degree",
+            "PhD",
+            "Other"
+        ],
+        index=2
+    )
+
+    # Preferred Work Location
+    preferred_location = st.text_input(
+        label="🌍 Preferred Work Location",
+        placeholder="e.g. Bengaluru, Hyderabad, Remote"
+    )
+
+    # GitHub Portfolio
+    github = st.text_input(
+        label="💻 GitHub Profile (Optional)",
+        placeholder="https://github.com/username"
+    )
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Candidate Information Preview
+# ----------------------------------------------------------
+
+st.subheader("📋 Candidate Profile Preview")
+
+preview_col1, preview_col2 = st.columns(2)
+
+with preview_col1:
+
+    st.markdown(f"""
+<div class="info-card">
+
+### 👤 Personal Details
+
+**Name:** {st.session_state.candidate_name or "Not Provided"}
+
+**Email:** {st.session_state.candidate_email or "Not Provided"}
+
+**Phone:** {st.session_state.candidate_phone or "Not Provided"}
+
+</div>
+""", unsafe_allow_html=True)
+
+with preview_col2:
+
+    st.markdown(f"""
+<div class="info-card">
+
+### 🎓 Professional Details
+
+**Experience:** {st.session_state.experience}
+
+**Education:** {st.session_state.education}
+
+**Preferred Location:** {preferred_location or "Not Provided"}
+
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Basic Validation
+# ----------------------------------------------------------
+
+required_fields = [
+    st.session_state.candidate_name,
+    st.session_state.candidate_email,
+    st.session_state.candidate_phone
+]
+
+if all(required_fields):
+
+    st.success("✅ Candidate information completed successfully.")
+
+else:
+
+    st.warning(
+        "⚠ Please complete the required fields before proceeding to resume upload."
+    )
+
+st.markdown("---")
+
+# ==========================================================
+# Job Selection
+# ==========================================================
+
+# ----------------------------------------------------------
+# Job Selection Section
+# ----------------------------------------------------------
+
+st.subheader("💼 Job Application")
+
+st.write("""
+Select the job role you are applying for. The AI Resume Screening
+Agent will evaluate your resume based on the selected role and
+generate personalized recommendations.
+""")
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Available Job Roles
+# ----------------------------------------------------------
+
+job_roles = [
+    "Software Engineer",
+    "Python Developer",
+    "Java Developer",
+    "Full Stack Developer",
+    "Frontend Developer",
+    "Backend Developer",
+    "Data Scientist",
+    "Machine Learning Engineer",
+    "Data Analyst",
+    "Business Analyst",
+    "Cloud Engineer",
+    "DevOps Engineer",
+    "Cyber Security Analyst",
+    "UI/UX Designer",
+    "Mobile App Developer"
+]
+
+# ----------------------------------------------------------
+# Create Two Columns
+# ----------------------------------------------------------
+
+left_col, right_col = st.columns(2)
+
+# ----------------------------------------------------------
+# Left Column
+# ----------------------------------------------------------
+
+with left_col:
+
+    st.session_state.job_role = st.selectbox(
+        "💼 Select Job Role",
+        job_roles
+    )
+
+    employment_type = st.selectbox(
+        "🏢 Employment Type",
+        [
+            "Full-Time",
+            "Part-Time",
+            "Internship",
+            "Contract",
+            "Remote"
+        ]
+    )
+
+    work_mode = st.selectbox(
+        "🏠 Preferred Work Mode",
+        [
+            "On-site",
+            "Hybrid",
+            "Remote"
+        ]
+    )
+
+# ----------------------------------------------------------
+# Right Column
+# ----------------------------------------------------------
+
+with right_col:
+
+    expected_salary = st.number_input(
+        "💰 Expected Annual Salary (₹)",
+        min_value=0,
+        step=50000,
+        value=500000
+    )
+
+    notice_period = st.selectbox(
+        "📅 Notice Period",
+        [
+            "Immediate",
+            "15 Days",
+            "30 Days",
+            "45 Days",
+            "60 Days",
+            "90 Days"
+        ]
+    )
+
+    willingness = st.selectbox(
+        "✈ Willing to Relocate",
+        [
+            "Yes",
+            "No",
+            "Depends on Opportunity"
+        ]
+    )
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Job Description Library
+# ----------------------------------------------------------
+
+job_descriptions = {
+
+    "Software Engineer":
+    """
+    • Strong programming fundamentals
+
+    • Data Structures & Algorithms
+
+    • OOP Concepts
+
+    • SQL
+
+    • Git & Version Control
+    """,
+
+    "Python Developer":
+    """
+    • Python
+
+    • Django / Flask / FastAPI
+
+    • REST APIs
+
+    • SQLite / MySQL
+
+    • Object-Oriented Programming
+    """,
+
+    "Full Stack Developer":
+    """
+    • HTML
+
+    • CSS
+
+    • JavaScript
+
+    • React
+
+    • Node.js
+
+    • Database Management
+    """,
+
+    "Data Scientist":
+    """
+    • Python
+
+    • Pandas
+
+    • NumPy
+
+    • Machine Learning
+
+    • Data Visualization
+
+    • Statistics
+    """,
+
+    "Machine Learning Engineer":
+    """
+    • Python
+
+    • Scikit-learn
+
+    • TensorFlow
+
+    • Deep Learning
+
+    • Feature Engineering
+
+    • Model Deployment
+    """
+}
+
+# ----------------------------------------------------------
+# Job Details Preview
+# ----------------------------------------------------------
+
+st.subheader("📄 Job Requirements")
+
+description = job_descriptions.get(
+    st.session_state.job_role,
+    """
+    • Relevant Technical Skills
+
+    • Good Communication
+
+    • Problem Solving
+
+    • Team Collaboration
+
+    • Professional Experience
+    """
+)
+
+st.info(description)
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Selected Job Summary
+# ----------------------------------------------------------
+
+st.subheader("📋 Application Summary")
+
+summary_col1, summary_col2 = st.columns(2)
+
+with summary_col1:
+
+    st.markdown(f"""
+<div class="info-card">
+
+### 💼 Position Details
+
+**Job Role:** {st.session_state.job_role}
+
+**Employment Type:** {employment_type}
+
+**Work Mode:** {work_mode}
+
+</div>
+""", unsafe_allow_html=True)
+
+with summary_col2:
+
+    st.markdown(f"""
+<div class="info-card">
+
+### 📊 Application Preferences
+
+**Expected Salary:** ₹ {expected_salary:,.0f}
+
+**Notice Period:** {notice_period}
+
+**Relocation:** {willingness}
+
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# AI Matching Criteria
+# ----------------------------------------------------------
+
+st.subheader("🎯 AI Matching Criteria")
+
+st.write("""
+During resume screening, the AI model evaluates your profile using
+multiple factors to estimate your suitability for the selected role.
+""")
+
+criteria1, criteria2, criteria3, criteria4 = st.columns(4)
+
+with criteria1:
+    st.metric("Technical Skills", "30%")
+
+with criteria2:
+    st.metric("Experience", "25%")
+
+with criteria3:
+    st.metric("Education", "20%")
+
+with criteria4:
+    st.metric("Projects & Certifications", "25%")
+
+st.info(
+    "💡 Tip: Ensure your resume highlights the skills and experience "
+    "most relevant to the selected job role."
+)
+
+st.markdown("---")
+
+# ==========================================================
+# Resume Upload
+# ==========================================================
+
+# ----------------------------------------------------------
+# Resume Upload Section
+# ----------------------------------------------------------
+
+st.subheader("📄 Upload Resume")
+
+st.write("""
+Upload your resume in **PDF** or **DOCX** format. The uploaded resume
+will be sent to the AI Resume Screening Engine for parsing,
+feature extraction, resume scoring, and candidate evaluation.
+""")
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Supported File Formats
+# ----------------------------------------------------------
+
+st.info("""
+**Supported Resume Formats**
+
+✔ PDF (.pdf)
+
+✔ Microsoft Word (.docx)
+
+**Maximum Recommended Size:** 10 MB
 """)
 
 # ----------------------------------------------------------
-# Upload Resume
+# Resume File Uploader
 # ----------------------------------------------------------
 
-uploaded_file = st.file_uploader(
-    "Choose Resume",
-    type=["pdf", "docx"]
+uploaded_resume = st.file_uploader(
+    label="Choose Resume",
+    type=["pdf", "docx"],
+    accept_multiple_files=False,
+    help="Upload your latest resume."
 )
+
+# Store uploaded file
+if uploaded_resume is not None:
+    st.session_state.uploaded_file = uploaded_resume
 
 st.markdown("---")
 
 # ----------------------------------------------------------
-# Analyze Resume
+# Resume Validation
 # ----------------------------------------------------------
 
-if uploaded_file is not None:
+if st.session_state.uploaded_file is not None:
 
-    if st.button("🚀 Analyze Resume", use_container_width=True):
+    uploaded_file = st.session_state.uploaded_file
 
-        with st.spinner("Analyzing Resume..."):
+    file_name = uploaded_file.name
+    file_size = uploaded_file.size / (1024 * 1024)
+    file_extension = file_name.split(".")[-1].lower()
+
+    # Validate Extension
+    if file_extension not in ["pdf", "docx"]:
+
+        st.error("❌ Invalid file format.")
+
+    else:
+
+        st.success("✅ Resume uploaded successfully.")
+
+        # --------------------------------------------------
+        # File Information
+        # --------------------------------------------------
+
+        st.subheader("📑 Resume Information")
+
+        info1, info2, info3 = st.columns(3)
+
+        with info1:
+            st.metric(
+                "File Name",
+                file_name
+            )
+
+        with info2:
+            st.metric(
+                "File Type",
+                file_extension.upper()
+            )
+
+        with info3:
+            st.metric(
+                "File Size",
+                f"{file_size:.2f} MB"
+            )
+
+        st.markdown("---")
+
+        # --------------------------------------------------
+        # Resume Status Card
+        # --------------------------------------------------
+
+        st.markdown(f"""
+<div class="success-card">
+
+### ✅ Resume Ready
+
+**Filename:** {file_name}
+
+**Format:** {file_extension.upper()}
+
+**Status:** Ready for AI Analysis
+
+Your resume has passed the initial validation and
+is ready to be processed by the AI Resume Screening
+Agent.
+
+</div>
+""", unsafe_allow_html=True)
+
+else:
+
+    st.warning("⚠ Please upload your resume before continuing.")
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Candidate Checklist
+# ----------------------------------------------------------
+
+st.subheader("📋 Pre-Analysis Checklist")
+
+check1, check2 = st.columns(2)
+
+with check1:
+
+    st.checkbox(
+        "Candidate information completed",
+        value=bool(st.session_state.candidate_name),
+        disabled=True
+    )
+
+    st.checkbox(
+        "Job role selected",
+        value=bool(st.session_state.job_role),
+        disabled=True
+    )
+
+with check2:
+
+    st.checkbox(
+        "Resume uploaded",
+        value=st.session_state.uploaded_file is not None,
+        disabled=True
+    )
+
+    ready = (
+        st.session_state.candidate_name != "" and
+        st.session_state.job_role != "" and
+        st.session_state.uploaded_file is not None
+    )
+
+    st.checkbox(
+        "Ready for AI Analysis",
+        value=ready,
+        disabled=True
+    )
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Analysis Readiness Status
+# ----------------------------------------------------------
+
+st.subheader("🚀 Analysis Status")
+
+if ready:
+
+    st.success("""
+Everything looks good!
+
+You can now proceed with AI Resume Analysis.
+The system will:
+
+• Parse your resume
+
+• Extract candidate details
+
+• Detect technical skills
+
+• Calculate Resume Score
+
+• Predict candidate suitability
+
+• Generate AI recommendations
+
+• Produce recruiter insights
+""")
+
+else:
+
+    st.warning("""
+Please complete the following before continuing:
+
+• Fill candidate information
+
+• Select a job role
+
+• Upload a valid resume
+""")
+
+st.markdown("---")
+
+# ==========================================================
+# AI Resume Analysis
+# ==========================================================
+
+# ----------------------------------------------------------
+# AI Resume Analysis Section
+# ----------------------------------------------------------
+
+st.subheader("🤖 AI Resume Analysis")
+
+st.write("""
+Click the button below to send your resume to the AI Resume
+Screening Engine. The backend will parse the resume, extract
+candidate information, predict the resume category, calculate
+the resume score, and generate AI insights.
+""")
+
+st.markdown("---")
+
+# ----------------------------------------------------------
+# Verify Required Inputs
+# ----------------------------------------------------------
+
+can_analyze = (
+    st.session_state.candidate_name != "" and
+    st.session_state.candidate_email != "" and
+    st.session_state.candidate_phone != "" and
+    st.session_state.job_role != "" and
+    st.session_state.uploaded_file is not None
+)
+
+# ----------------------------------------------------------
+# Analysis Button
+# ----------------------------------------------------------
+
+analyze_btn = st.button(
+    "🚀 Analyze Resume",
+    type="primary",
+    use_container_width=True,
+    disabled=not can_analyze
+)
+
+# ----------------------------------------------------------
+# Perform Resume Analysis
+# ----------------------------------------------------------
+
+if analyze_btn:
+
+    uploaded_file = st.session_state.uploaded_file
+
+    # Reset previous analysis
+    st.session_state.analysis_completed = False
+    st.session_state.analysis_result = None
+
+    # Progress Bar
+    progress = st.progress(0)
+
+    try:
+
+        with st.spinner("Analyzing resume... Please wait..."):
+
+            # ----------------------------------------------
+            # Upload Resume File
+            # ----------------------------------------------
 
             files = {
                 "file": (
@@ -54,176 +1081,128 @@ if uploaded_file is not None:
                 )
             }
 
-            try:
+            # ----------------------------------------------
+            # Additional Candidate Information
+            # ----------------------------------------------
 
-                response = requests.post(
-                    "https://ai-resume-screening-agent-s1uy.onrender.com/ai_resume_analysis",
-                    files=files
-                )
+            data = {
+                "candidate_name": st.session_state.candidate_name,
+                "candidate_email": st.session_state.candidate_email,
+                "candidate_phone": st.session_state.candidate_phone,
+                "experience": st.session_state.experience,
+                "education": st.session_state.education,
+                "job_role": st.session_state.job_role
+            }
+
+            progress.progress(15)
+
+            # ----------------------------------------------
+            # Send Request to FastAPI
+            # ----------------------------------------------
+
+            response = requests.post(
+                SCREENING_API,
+                files=files,
+                data=data,
+                timeout=120
+            )
+
+            progress.progress(65)
+
+            # ----------------------------------------------
+            # Handle Successful Response
+            # ----------------------------------------------
+
+            if response.status_code == 200:
 
                 result = response.json()
 
-                if result["Status"] != "Success":
+                st.session_state.analysis_result = result
+                st.session_state.analysis_completed = True
 
-                    st.error("Resume Analysis Failed")
+                progress.progress(100)
 
-                else:
+                st.success("✅ Resume analyzed successfully!")
 
-                    candidate = result["Candidate"]
+            else:
 
-                    analysis = result["AI Analysis"]
-                    
-                    prediction = "Selected"
+                st.error(
+                    f"Backend Error ({response.status_code})"
+                )
 
-                    confidence = f"{analysis['Match Score']}%"
+                try:
+                    st.json(response.json())
+                except Exception:
+                    st.write(response.text)
 
-                    st.session_state["candidate"] = candidate
+    # ------------------------------------------------------
+    # Connection Error
+    # ------------------------------------------------------
 
-                    st.session_state["analysis"] = analysis
+    except requests.exceptions.ConnectionError:
 
-                    st.session_state["prediction"] = prediction
+        st.error(
+            "Unable to connect to the FastAPI backend."
+        )
 
-                    st.session_state["confidence"] = confidence
+    # ------------------------------------------------------
+    # Timeout Error
+    # ------------------------------------------------------
 
-                    # --------------------------------------
-                    # Candidate Details
-                    # --------------------------------------
+    except requests.exceptions.Timeout:
 
-                    st.header("👤 Candidate Details")
+        st.error(
+            "The request timed out. Please try again."
+        )
 
-                    c1, c2 = st.columns(2)
+    # ------------------------------------------------------
+    # Unexpected Error
+    # ------------------------------------------------------
 
-                    with c1:
+    except Exception as e:
 
-                        st.write("### Name")
-                        st.success(candidate["Name"])
+        st.error("Unexpected Error")
 
-                        st.write("### Email")
-                        st.info(candidate["Email"])
+        st.exception(e)
 
-                        st.write("### Phone")
-                        st.info(candidate["Phone"])
+st.markdown("---")
 
-                        st.write("### Education")
-                        st.success(candidate["Education"])
+# ----------------------------------------------------------
+# Analysis Status
+# ----------------------------------------------------------
 
-                    with c2:
+st.subheader("📊 Analysis Status")
 
-                        st.write("### Experience")
-                        st.success(
-                            f"{candidate['Experience']} Years"
-                        )
+if st.session_state.analysis_completed:
 
-                        st.write("### Skills")
+    st.success("""
+AI Resume Analysis Completed Successfully.
 
-                        for skill in candidate["Skills"]:
-                            st.write("✔", skill)
+The extracted information is now available for:
 
-                        st.write("### Certifications")
+• Resume Score
 
-                        for cert in candidate["Certifications"]:
-                            st.write("✔", cert)
+• Candidate Classification
 
-                    st.markdown("---")
+• Skill Extraction
 
-                    # --------------------------------------
-                    # Resume Summary
-                    # --------------------------------------
+• Resume Summary
 
-                    st.header("📄 Resume Summary")
+• AI Suggestions
 
-                    st.success(
-                        analysis["Resume Summary"]
-                    )
+• Recruiter Recommendation
 
-                    st.markdown("---")
-
-                    # --------------------------------------
-                    # Match Score
-                    # --------------------------------------
-
-                    st.header("🎯 Match Score")
-
-                    score = analysis["Match Score"]
-
-                    st.metric(
-                        "Overall Match Score",
-                        f"{score}%"
-                    )
-
-                    st.progress(score / 100)
-
-                    st.markdown("---")
-
-                    # --------------------------------------
-                    # Skill Gap
-                    # --------------------------------------
-
-                    st.header("📉 Skill Gap")
-
-                    gaps = analysis["Skill Gap"]
-
-                    if len(gaps) == 0:
-
-                        st.success("No Skill Gap Found")
-
-                    else:
-
-                        for gap in gaps:
-                            st.warning(gap)
-
-                    st.markdown("---")
-
-                    # --------------------------------------
-                    # Interview Questions
-                    # --------------------------------------
-
-                    st.header("❓ Interview Questions")
-
-                    for question in analysis["Interview Questions"]:
-
-                        st.write("•", question)
-
-                    st.markdown("---")
-
-                    # --------------------------------------
-                    # HR Recommendation
-                    # --------------------------------------
-
-                    st.header("👨‍💼 HR Recommendation")
-
-                    recommendation = analysis["HR Recommendation"]
-
-                    if recommendation == "Highly Recommended":
-
-                        st.success(recommendation)
-
-                    elif recommendation == "Recommended":
-
-                        st.info(recommendation)
-
-                    else:
-
-                        st.warning(recommendation)
-
-                    st.markdown("---")
-
-                    # --------------------------------------
-                    # Email Draft
-                    # --------------------------------------
-
-                    st.header("📧 Email Draft")
-
-                    st.text_area(
-                        "Generated Email",
-                        analysis["Email Draft"],
-                        height=220
-                    )
-
-            except Exception as e:
-
-                st.error(f"Error: {e}")
+Continue scrolling to view the detailed results.
+""")
 
 else:
 
-    st.info("Please upload a PDF or DOCX resume.")
+    st.info("""
+No analysis has been performed yet.
+
+Complete all required information and click
+**Analyze Resume** to begin AI processing.
+""")
+
+st.markdown("---")
+
