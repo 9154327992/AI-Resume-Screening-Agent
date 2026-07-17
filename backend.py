@@ -33,6 +33,21 @@ from fastapi import UploadFile, File
 # Import Upload Module
 from upload import upload_resume
 
+# Import Database Functions
+from database import (
+
+    insert_candidate,
+
+    get_all_candidates,
+
+    get_candidate,
+
+    update_candidate_status,
+
+    delete_candidate
+
+)
+
 # ==========================================================
 # Create FastAPI App
 # ==========================================================
@@ -163,6 +178,10 @@ async def screen_resume(file: UploadFile = File(...)):
     Feature Extraction
             ↓
     Decision Tree Prediction
+            ↓
+    AI Resume Analysis
+            ↓
+    Save Candidate to Database
     """
 
     # -----------------------------------------
@@ -214,6 +233,34 @@ async def screen_resume(file: UploadFile = File(...)):
         result = "Rejected"
 
     # -----------------------------------------
+    # Generate AI Resume Analysis
+    # -----------------------------------------
+
+    analysis = ai_resume_analysis(parsed_resume)
+
+    match_score = analysis["Match Score"]
+
+    recommendation = analysis["HR Recommendation"]
+
+    # -----------------------------------------
+    # Save Candidate to SQLite Database
+    # -----------------------------------------
+
+    insert_candidate(
+
+        parsed_resume=parsed_resume,
+
+        prediction=result,
+
+        confidence=round(float(probability) * 100, 2),
+
+        match_score=match_score,
+
+        recommendation=recommendation
+
+    )
+
+    # -----------------------------------------
     # Return Response
     # -----------------------------------------
 
@@ -223,7 +270,7 @@ async def screen_resume(file: UploadFile = File(...)):
 
         "Prediction": result,
 
-        "Confidence": f"{round(float(probability)*100,2)}%",
+        "Confidence": f"{round(float(probability) * 100, 2)}%",
 
         "Candidate": parsed_resume
 
@@ -286,6 +333,148 @@ async def analyze_resume(file: UploadFile = File(...)):
         "AI Analysis": analysis
 
     }
+
+# ==========================================================
+# Get All Candidates API
+# ==========================================================
+
+@app.get("/candidates")
+def fetch_all_candidates():
+    """
+    Retrieve all screened candidates from the SQLite database.
+    """
+
+    try:
+
+        candidates = get_all_candidates()
+
+        return {
+
+            "Status": "Success",
+
+            "Total_Candidates": len(candidates),
+
+            "Candidates": candidates
+
+        }
+
+    except Exception as e:
+
+        return {
+
+            "Status": "Failed",
+
+            "Error": str(e)
+
+        }
+
+# ==========================================================
+# Get Candidate By ID API
+# ==========================================================
+
+@app.get("/candidate/{candidate_id}")
+def fetch_candidate(candidate_id: int):
+    """
+    Retrieve a single candidate using the candidate ID.
+    """
+
+    try:
+
+        candidate = get_candidate(candidate_id)
+
+        if candidate is None:
+
+            return {
+
+                "Status": "Failed",
+
+                "Message": "Candidate not found."
+
+            }
+
+        return {
+
+            "Status": "Success",
+
+            "Candidate": candidate
+
+        }
+
+    except Exception as e:
+
+        return {
+
+            "Status": "Failed",
+
+            "Error": str(e)
+
+        }
+
+# ==========================================================
+# Update Candidate Status API
+# ==========================================================
+
+class CandidateStatus(BaseModel):
+
+    status: str
+
+
+@app.put("/candidate/{candidate_id}")
+def update_status(
+    candidate_id: int,
+    data: CandidateStatus
+):
+    """
+    Update the recruitment status of a candidate.
+    """
+
+    try:
+
+        result = update_candidate_status(
+
+            candidate_id,
+
+            data.status
+
+        )
+
+        return result
+
+    except Exception as e:
+
+        return {
+
+            "Status": "Failed",
+
+            "Error": str(e)
+
+        }
+
+# ==========================================================
+# Delete Candidate API
+# ==========================================================
+
+@app.delete("/candidate/{candidate_id}")
+def remove_candidate(candidate_id: int):
+    """
+    Delete a candidate from the SQLite database.
+    """
+
+    try:
+
+        result = delete_candidate(candidate_id)
+
+        return result
+
+    except Exception as e:
+
+        return {
+
+            "Status": "Failed",
+
+            "Error": str(e)
+
+        }
 
 # ==========================================================
 # Prediction API
