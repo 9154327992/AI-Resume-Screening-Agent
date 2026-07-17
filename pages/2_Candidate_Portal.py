@@ -1298,3 +1298,177 @@ to generate the prediction.
 """)
 
 st.markdown("---")
+
+# ==========================================================
+# Candidate Information Dashboard
+# ==========================================================
+
+# ----------------------------------------------------------
+# Candidate Information
+# ----------------------------------------------------------
+
+st.subheader("👤 Candidate Information")
+
+if st.session_state.analysis_completed:
+
+    result = st.session_state.analysis_result
+
+    candidate = result.get("Candidate", {})
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Personal Information
+    # ------------------------------------------------------
+
+    st.subheader("📋 Personal Details")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        st.markdown(f"""
+<div class="info-card">
+
+### 👤 Candidate
+
+**Name**
+
+{candidate.get("Name", "Not Available")}
+
+<br>
+
+**Email**
+
+{candidate.get("Email", "Not Available")}
+
+</div>
+""", unsafe_allow_html=True)
+
+    with col2:
+
+        st.markdown(f"""
+<div class="info-card">
+
+### 📞 Contact
+
+**Phone**
+
+{candidate.get("Phone", "Not Available")}
+
+<br>
+
+**Education**
+
+{candidate.get("Education", "Not Available")}
+
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Experience
+    # ------------------------------------------------------
+
+    st.subheader("💼 Experience")
+
+    experience = candidate.get("Experience", 0)
+
+    exp1, exp2 = st.columns(2)
+
+    with exp1:
+
+        st.metric(
+            "Years of Experience",
+            experience
+        )
+
+    with exp2:
+
+        if experience == 0:
+
+            st.info("Candidate appears to be a Fresher.")
+
+        else:
+
+            st.success(f"{experience} Years Experience")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Skills
+    # ------------------------------------------------------
+
+    st.subheader("🛠 Technical Skills")
+
+    skills = candidate.get("Skills", [])
+
+    if skills:
+
+        skill_cols = st.columns(3)
+
+        for index, skill in enumerate(skills):
+
+            with skill_cols[index % 3]:
+
+                st.success(f"✔ {skill}")
+
+    else:
+
+        st.warning("No skills detected.")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Certifications
+    # ------------------------------------------------------
+
+    st.subheader("🏅 Certifications")
+
+    certifications = candidate.get("Certifications", [])
+
+    if certifications:
+
+        for certificate in certifications:
+
+            st.info(f"📜 {certificate}")
+
+    else:
+
+        st.warning("No certifications detected.")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Candidate Summary
+    # ------------------------------------------------------
+
+    st.subheader("📄 Candidate Summary")
+
+    summary = f"""
+Name           : {candidate.get("Name","N/A")}
+
+Email          : {candidate.get("Email","N/A")}
+
+Phone          : {candidate.get("Phone","N/A")}
+
+Education      : {candidate.get("Education","N/A")}
+
+Experience     : {candidate.get("Experience","N/A")} Years
+
+Skills         : {', '.join(candidate.get("Skills", []))}
+
+Certifications : {', '.join(candidate.get("Certifications", []))}
+"""
+
+    st.code(summary)
+
+else:
+
+    st.info(
+        "Run AI Resume Screening to view candidate details."
+    )
+
+st.markdown("---")
+
