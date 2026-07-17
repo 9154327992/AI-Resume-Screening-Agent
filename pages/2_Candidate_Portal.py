@@ -1009,69 +1009,60 @@ Please complete the following before continuing:
 st.markdown("---")
 
 # ==========================================================
-# AI Resume Analysis
+# AI Resume Screening
 # ==========================================================
 
 # ----------------------------------------------------------
-# AI Resume Analysis Section
+# AI Resume Screening Section
 # ----------------------------------------------------------
 
-st.subheader("🤖 AI Resume Analysis")
+st.subheader("🤖 AI Resume Screening")
 
 st.write("""
-Click the button below to send your resume to the AI Resume
-Screening Engine. The backend will parse the resume, extract
-candidate information, predict the resume category, calculate
-the resume score, and generate AI insights.
+Click the button below to start the AI Resume Screening process.
+The uploaded resume will be sent to the FastAPI backend where it
+will be parsed, processed, and evaluated using the trained
+Decision Tree model.
 """)
 
 st.markdown("---")
 
 # ----------------------------------------------------------
-# Verify Required Inputs
+# Check Required Inputs
 # ----------------------------------------------------------
 
-can_analyze = (
-    st.session_state.candidate_name != "" and
-    st.session_state.candidate_email != "" and
-    st.session_state.candidate_phone != "" and
-    st.session_state.job_role != "" and
+ready_for_screening = (
     st.session_state.uploaded_file is not None
+    and st.session_state.candidate_name != ""
+    and st.session_state.job_role != ""
 )
 
 # ----------------------------------------------------------
-# Analysis Button
+# Start Screening Button
 # ----------------------------------------------------------
 
-analyze_btn = st.button(
-    "🚀 Analyze Resume",
-    type="primary",
+start_screening = st.button(
+    "🚀 Start AI Screening",
     use_container_width=True,
-    disabled=not can_analyze
+    type="primary",
+    disabled=not ready_for_screening
 )
 
 # ----------------------------------------------------------
-# Perform Resume Analysis
+# Resume Screening
 # ----------------------------------------------------------
 
-if analyze_btn:
+if start_screening:
 
     uploaded_file = st.session_state.uploaded_file
 
-    # Reset previous analysis
-    st.session_state.analysis_completed = False
-    st.session_state.analysis_result = None
-
-    # Progress Bar
     progress = st.progress(0)
 
     try:
 
-        with st.spinner("Analyzing resume... Please wait..."):
+        with st.spinner("Analyzing Resume..."):
 
-            # ----------------------------------------------
-            # Upload Resume File
-            # ----------------------------------------------
+            progress.progress(10)
 
             files = {
                 "file": (
@@ -1081,37 +1072,15 @@ if analyze_btn:
                 )
             }
 
-            # ----------------------------------------------
-            # Additional Candidate Information
-            # ----------------------------------------------
-
-            data = {
-                "candidate_name": st.session_state.candidate_name,
-                "candidate_email": st.session_state.candidate_email,
-                "candidate_phone": st.session_state.candidate_phone,
-                "experience": st.session_state.experience,
-                "education": st.session_state.education,
-                "job_role": st.session_state.job_role
-            }
-
-            progress.progress(15)
-
-            # ----------------------------------------------
-            # Send Request to FastAPI
-            # ----------------------------------------------
+            progress.progress(30)
 
             response = requests.post(
-                SCREENING_API,
+                f"{API_BASE_URL}/screen_resume",
                 files=files,
-                data=data,
                 timeout=120
             )
 
-            progress.progress(65)
-
-            # ----------------------------------------------
-            # Handle Successful Response
-            # ----------------------------------------------
+            progress.progress(75)
 
             if response.status_code == 200:
 
@@ -1122,87 +1091,210 @@ if analyze_btn:
 
                 progress.progress(100)
 
-                st.success("✅ Resume analyzed successfully!")
+                st.success("✅ Resume screening completed successfully.")
 
             else:
 
                 st.error(
-                    f"Backend Error ({response.status_code})"
+                    f"Backend Error : {response.status_code}"
                 )
 
-                try:
-                    st.json(response.json())
-                except Exception:
-                    st.write(response.text)
-
-    # ------------------------------------------------------
-    # Connection Error
-    # ------------------------------------------------------
+                st.write(response.text)
 
     except requests.exceptions.ConnectionError:
 
         st.error(
-            "Unable to connect to the FastAPI backend."
+            "❌ Unable to connect to FastAPI backend."
         )
-
-    # ------------------------------------------------------
-    # Timeout Error
-    # ------------------------------------------------------
 
     except requests.exceptions.Timeout:
 
         st.error(
-            "The request timed out. Please try again."
+            "⏱ Request timed out."
         )
 
-    # ------------------------------------------------------
-    # Unexpected Error
-    # ------------------------------------------------------
-
     except Exception as e:
-
-        st.error("Unexpected Error")
 
         st.exception(e)
 
 st.markdown("---")
 
 # ----------------------------------------------------------
-# Analysis Status
+# Screening Status
 # ----------------------------------------------------------
 
-st.subheader("📊 Analysis Status")
+st.subheader("📊 Screening Status")
 
 if st.session_state.analysis_completed:
 
     st.success("""
-AI Resume Analysis Completed Successfully.
+AI Resume Screening Completed Successfully.
 
-The extracted information is now available for:
+The screening report now contains:
 
-• Resume Score
+• Prediction
 
-• Candidate Classification
+• Confidence Score
 
-• Skill Extraction
+• Candidate Information
 
-• Resume Summary
-
-• AI Suggestions
-
-• Recruiter Recommendation
-
-Continue scrolling to view the detailed results.
+Continue to the next section to view
+the complete screening results.
 """)
 
 else:
 
     st.info("""
-No analysis has been performed yet.
+Resume screening has not started.
 
-Complete all required information and click
-**Analyze Resume** to begin AI processing.
+Complete the previous sections and click
+**Start AI Screening**.
 """)
 
 st.markdown("---")
 
+# ==========================================================
+# Resume Screening Results
+# ==========================================================
+
+# ----------------------------------------------------------
+# Resume Screening Results
+# ----------------------------------------------------------
+
+st.subheader("📊 Resume Screening Results")
+
+# ----------------------------------------------------------
+# Display Results
+# ----------------------------------------------------------
+
+if st.session_state.analysis_completed:
+
+    result = st.session_state.analysis_result
+
+    prediction = result.get("Prediction", "N/A")
+    confidence = result.get("Confidence", "N/A")
+    status = result.get("Status", "Success")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Result Metrics
+    # ------------------------------------------------------
+
+    metric1, metric2, metric3 = st.columns(3)
+
+    with metric1:
+
+        st.metric(
+            "Prediction",
+            prediction
+        )
+
+    with metric2:
+
+        st.metric(
+            "Confidence",
+            confidence
+        )
+
+    with metric3:
+
+        st.metric(
+            "Status",
+            status
+        )
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Recommendation Card
+    # ------------------------------------------------------
+
+    if prediction == "Selected":
+
+        st.success("""
+### ✅ Candidate Recommendation
+
+The candidate satisfies the screening criteria.
+
+Recommendation:
+
+• Proceed to Technical Interview
+
+• Verify projects and experience
+
+• Schedule HR discussion
+""")
+
+    else:
+
+        st.warning("""
+### ⚠ Candidate Recommendation
+
+The candidate does not satisfy the screening criteria.
+
+Recommendation:
+
+• Improve resume
+
+• Add relevant technical skills
+
+• Gain more practical experience
+
+• Reapply after improvement
+""")
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Confidence Progress
+    # ------------------------------------------------------
+
+    st.subheader("📈 Prediction Confidence")
+
+    try:
+
+        confidence_value = float(
+            confidence.replace("%", "")
+        )
+
+        st.progress(confidence_value / 100)
+
+        st.write(f"Model Confidence: **{confidence}**")
+
+    except:
+
+        st.write(confidence)
+
+    st.markdown("---")
+
+    # ------------------------------------------------------
+    # Screening Summary
+    # ------------------------------------------------------
+
+    st.subheader("📝 Screening Summary")
+
+    summary = f"""
+Candidate Name : {st.session_state.candidate_name}
+
+Applied Role : {st.session_state.job_role}
+
+Prediction : {prediction}
+
+Confidence : {confidence}
+
+Screening Status : {status}
+"""
+
+    st.code(summary)
+
+else:
+
+    st.info("""
+No screening results available.
+
+Click **Start AI Screening**
+to generate the prediction.
+""")
+
+st.markdown("---")
