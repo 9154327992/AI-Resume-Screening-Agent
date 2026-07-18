@@ -204,21 +204,24 @@ Footer
 try:
 
     response = requests.get(
-    CANDIDATES_API,
-    timeout=5
-)
 
-if response.status_code == 200:
+        CANDIDATES_API,
 
-    data = response.json()
+        timeout=5
 
-    candidate_df = pd.DataFrame(
-        data.get("Candidates", [])
     )
 
-else:
+    if response.status_code == 200:
 
-    candidate_df = pd.DataFrame()
+        data = response.json()
+
+        candidate_df = pd.DataFrame(
+            data.get("Candidates", [])
+        )
+
+    else:
+
+        candidate_df = pd.DataFrame()
 
 except Exception:
 
@@ -451,6 +454,14 @@ required_columns = [
 ]
 
 # Handle empty or invalid API response
+required_columns = [
+    "prediction",
+    "status",
+    "name",
+    "email",
+    "match_score"
+]
+
 if candidate_df.empty or not all(col in candidate_df.columns for col in required_columns):
 
     total_candidates = 0
