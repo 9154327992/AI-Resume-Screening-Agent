@@ -76,11 +76,16 @@ st.markdown("""
 /* Information Card */
 .info-card{
     background:#FFFFFF;
+    color:#111827;
     border-radius:12px;
     padding:20px;
     border-left:6px solid #2563EB;
     box-shadow:0px 4px 10px rgba(0,0,0,0.08);
     margin-bottom:20px;
+}
+
+.info-card *{
+    color:#111827 !important;
 }
 
 /* Upload Area */
@@ -95,28 +100,43 @@ st.markdown("""
 /* Result Card */
 .result-card{
     background:#EFF6FF;
+    color:#111827;
     border-radius:12px;
     padding:18px;
     border-left:6px solid #1D4ED8;
     margin-bottom:15px;
 }
 
+.result-card *{
+    color:#111827 !important;
+}
+
 /* Success Card */
 .success-card{
     background:#ECFDF5;
+    color:#111827;
     border-left:6px solid #10B981;
     border-radius:12px;
     padding:18px;
     margin-bottom:15px;
 }
 
+.success-card *{
+    color:#111827 !important;
+}
+
 /* Warning Card */
 .warning-card{
     background:#FEFCE8;
+    color:#111827;
     border-left:6px solid #F59E0B;
     border-radius:12px;
     padding:18px;
     margin-bottom:15px;
+}
+
+.warning-card *{
+    color:#111827 !important;
 }
 
 /* Metric Styling */
