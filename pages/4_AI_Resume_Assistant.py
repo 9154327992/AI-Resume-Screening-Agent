@@ -224,10 +224,6 @@ except Exception:
 
     candidate_df = pd.DataFrame()
 
-except Exception:
-
-    candidate_df = pd.DataFrame()
-
 # ==========================================================
 # Hero Section
 # ==========================================================
@@ -454,24 +450,10 @@ required_columns = [
     "match_score"
 ]
 
-# Handle empty or invalid API response
-required_columns = [
-    "prediction",
-    "status",
-    "name",
-    "email",
-    "match_score"
-]
-
-if candidate_df.empty or not all(col in candidate_df.columns for col in required_columns):
-
-    total_candidates = 0
-    selected = 0
-    rejected = 0
-
-else:
-
-    if candidate_df.empty or "prediction" not in candidate_df.columns:
+if (
+    candidate_df.empty
+    or not all(col in candidate_df.columns for col in required_columns)
+):
 
     total_candidates = 0
     selected = 0
@@ -824,9 +806,13 @@ else:
 
                         if analysis_response.status_code == 200:
 
-                        st.session_state.ai_analysis_result = analysis_response.json()
+                        st.session_state.ai_analysis_result = (
+                            analysis_response.json()
+                        )
 
-                        st.success("AI analysis generated successfully.")
+                        st.success(
+                            "AI analysis generated successfully."
+                        )
 
                         else:
 
@@ -834,7 +820,9 @@ else:
                                 f"Backend Error ({analysis_response.status_code})"
                             )
 
-                            st.write(analysis_response.text)
+                            st.write(
+                                analysis_response.text
+                            )
 
                     except Exception as e:
 
