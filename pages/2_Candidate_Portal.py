@@ -30,12 +30,8 @@ st.set_page_config(
 # FastAPI Backend URL
 # Change this URL if running locally.
 API_BASE_URL = "https://ai-resume-screening-agent-cxgp.onrender.com"
-
-# Resume Screening Endpoint
-SCREENING_API = f"{API_BASE_URL}/predict"
-
-# Health Check Endpoint
-HEALTH_API = f"{API_BASE_URL}/health"
+SCREEN_RESUME_API = f"{API_BASE_URL}/screen_resume"
+AI_ANALYSIS_API = f"{API_BASE_URL}/ai_resume_analysis"
 
 # ----------------------------------------------------------
 # Initialize Session State Variables
@@ -1523,7 +1519,7 @@ if generate_ai:
             }
 
             response = requests.post(
-                f"{API_BASE_URL}/ai_resume_analysis",
+                AI_ANALYSIS_API,
                 files=files,
                 timeout=120
             )
