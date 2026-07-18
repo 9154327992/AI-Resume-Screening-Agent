@@ -87,9 +87,7 @@ Main Layout
 ====================================================== */
 
 .main{
-
     padding-top:20px;
-
 }
 
 /* ======================================================
@@ -97,19 +95,17 @@ Dashboard Cards
 ====================================================== */
 
 .dashboard-card{
-
-    background:white;
-
+    background:#FFFFFF;
+    color:#111827;
     padding:20px;
-
     border-radius:12px;
-
     border-left:6px solid #2563EB;
-
     box-shadow:0px 3px 8px rgba(0,0,0,0.08);
-
     margin-bottom:18px;
+}
 
+.dashboard-card *{
+    color:#111827 !important;
 }
 
 /* ======================================================
@@ -117,17 +113,16 @@ Summary Cards
 ====================================================== */
 
 .summary-card{
-
     background:#EFF6FF;
-
+    color:#111827;
     padding:18px;
-
     border-radius:12px;
-
     border-left:6px solid #1D4ED8;
-
     margin-bottom:15px;
+}
 
+.summary-card *{
+    color:#111827 !important;
 }
 
 /* ======================================================
@@ -135,17 +130,16 @@ Success Cards
 ====================================================== */
 
 .success-card{
-
     background:#ECFDF5;
-
+    color:#111827;
     padding:18px;
-
     border-radius:12px;
-
     border-left:6px solid #10B981;
-
     margin-bottom:15px;
+}
 
+.success-card *{
+    color:#111827 !important;
 }
 
 /* ======================================================
@@ -153,17 +147,16 @@ Warning Cards
 ====================================================== */
 
 .warning-card{
-
     background:#FEFCE8;
-
+    color:#111827;
     padding:18px;
-
     border-radius:12px;
-
     border-left:6px solid #F59E0B;
-
     margin-bottom:15px;
+}
 
+.warning-card *{
+    color:#111827 !important;
 }
 
 /* ======================================================
@@ -171,17 +164,16 @@ Danger Cards
 ====================================================== */
 
 .danger-card{
-
     background:#FEF2F2;
-
+    color:#111827;
     padding:18px;
-
     border-radius:12px;
-
     border-left:6px solid #DC2626;
-
     margin-bottom:15px;
+}
 
+.danger-card *{
+    color:#111827 !important;
 }
 
 /* ======================================================
@@ -189,17 +181,11 @@ Metric Cards
 ====================================================== */
 
 div[data-testid="metric-container"]{
-
-    background:white;
-
+    background:#FFFFFF;
     border-radius:12px;
-
     border:1px solid #E5E7EB;
-
     padding:15px;
-
     box-shadow:0px 3px 8px rgba(0,0,0,0.08);
-
 }
 
 /* ======================================================
@@ -207,15 +193,10 @@ Buttons
 ====================================================== */
 
 .stButton>button{
-
     width:100%;
-
     height:48px;
-
     border-radius:10px;
-
     font-weight:bold;
-
 }
 
 /* ======================================================
@@ -223,9 +204,7 @@ DataFrames
 ====================================================== */
 
 [data-testid="stDataFrame"]{
-
     border-radius:10px;
-
 }
 
 /* ======================================================
@@ -233,11 +212,8 @@ Horizontal Rule
 ====================================================== */
 
 hr{
-
     margin-top:25px;
-
     margin-bottom:25px;
-
 }
 
 </style>
