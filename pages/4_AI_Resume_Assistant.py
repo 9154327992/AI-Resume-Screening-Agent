@@ -204,11 +204,8 @@ Footer
 try:
 
     response = requests.get(
-
         CANDIDATES_API,
-
         timeout=5
-
     )
 
     if response.status_code == 200:
@@ -222,6 +219,10 @@ try:
     else:
 
         candidate_df = pd.DataFrame()
+
+except Exception:
+
+    candidate_df = pd.DataFrame()
 
 except Exception:
 
@@ -470,17 +471,31 @@ if candidate_df.empty or not all(col in candidate_df.columns for col in required
 
 else:
 
+    if candidate_df.empty or "prediction" not in candidate_df.columns:
+
+    total_candidates = 0
+    selected = 0
+    rejected = 0
+
+else:
+
     total_candidates = len(candidate_df)
 
     selected = len(
         candidate_df[
-            candidate_df["prediction"].astype(str).str.strip().str.lower() == "selected"
+            candidate_df["prediction"]
+            .astype(str)
+            .str.strip()
+            .str.lower() == "selected"
         ]
     )
 
     rejected = len(
         candidate_df[
-            candidate_df["prediction"].astype(str).str.strip().str.lower() == "rejected"
+            candidate_df["prediction"]
+            .astype(str)
+            .str.strip()
+            .str.lower() == "rejected"
         ]
     )
 
