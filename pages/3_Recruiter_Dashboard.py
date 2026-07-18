@@ -27,7 +27,7 @@ st.set_page_config(
 # ----------------------------------------------------------
 
 # FastAPI Backend URL
-API_BASE_URL = "https://your-render-backend.onrender.com"
+API_BASE_URL = "https://ai-resume-screening-agent-cxgp.onrender.com"
 
 # Backend Endpoints
 SCREEN_RESUME_API = f"{API_BASE_URL}/screen_resume"
