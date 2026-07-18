@@ -276,36 +276,45 @@ st.markdown("---")
 
 st.subheader("📊 Recruitment Overview")
 
+# Calculate live statistics
+if not candidate_df.empty:
+
+    total_candidates = len(candidate_df)
+
+    selected_candidates = len(
+        candidate_df[candidate_df["prediction"] == "Selected"]
+    )
+
+    rejected_candidates = len(
+        candidate_df[candidate_df["prediction"] == "Rejected"]
+    )
+
+    selection_rate = round(
+        (selected_candidates / total_candidates) * 100,
+        2
+    ) if total_candidates > 0 else 0
+
+else:
+
+    total_candidates = 0
+    selected_candidates = 0
+    rejected_candidates = 0
+    selection_rate = 0
+
 metric1, metric2, metric3, metric4 = st.columns(4)
 
 with metric1:
-
-    st.metric(
-        "Candidates Screened",
-        "0"
-    )
+    st.metric("Candidates Screened", total_candidates)
 
 with metric2:
-
-    st.metric(
-        "Selected",
-        "0"
-    )
+    st.metric("Selected", selected_candidates)
 
 with metric3:
-
-    st.metric(
-        "Rejected",
-        "0"
-    )
+    st.metric("Rejected", rejected_candidates)
 
 with metric4:
-
-    st.metric(
-        "Selection Rate",
-        "0%"
-    )
-
+    st.metric("Selection Rate", f"{selection_rate}%")
+    
 st.markdown("---")
 
 # ----------------------------------------------------------
