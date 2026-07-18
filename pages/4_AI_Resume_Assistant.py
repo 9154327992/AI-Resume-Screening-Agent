@@ -714,6 +714,8 @@ else:
 
             candidate = response.json()
 
+            st.write(candidate)
+
             left, right = st.columns(2)
 
             with left:
@@ -726,17 +728,17 @@ else:
 </div>
 """, unsafe_allow_html=True)
 
-                st.write(f"**Name:** {candidate['name']}")
-                st.write(f"**Email:** {candidate['email']}")
-                st.write(f"**Phone:** {candidate['phone']}")
+                st.write(f"**Name:** {candidate.get('name', 'N/A')}")
+                st.write(f"**Email:** {candidate.get('email', 'N/A')}")
+                st.write(f"**Phone:** {candidate.get('phone', 'N/A')}")
 
                 st.write("### 🎓 Education")
 
-                st.info(candidate["education"])
+                st.info(candidate.get("education", "N/A"))
 
                 st.write("### 💼 Experience")
 
-                st.info(candidate["experience"])
+                st.info(candidate.get("experience", "N/A"))
 
             with right:
 
@@ -752,7 +754,7 @@ else:
 
                     "Prediction",
 
-                    candidate["prediction"]
+                    candidate.get("prediction", "N/A")
 
                 )
 
