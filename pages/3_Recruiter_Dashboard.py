@@ -309,6 +309,7 @@ with action4:
         "📑 Export Report",
         use_container_width=True
     ):
+        candidate = None
         if candidate is not None:
 
             report = pd.DataFrame({
