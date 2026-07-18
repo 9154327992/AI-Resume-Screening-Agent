@@ -34,49 +34,121 @@ DEVELOPER = "Your Name"
 # Apply Custom CSS Styling
 # ----------------------------------------------------------
 
-st.markdown(
-    """
-    <style>
+st.markdown("""
+<style>
 
-    /* Main page background */
-    .main{
-        background-color:#F8FAFC;
-    }
+/* Main Container */
+.main{
+    padding-top:20px;
+}
 
-    /* Hero title styling */
-    .hero-title{
-        font-size:48px;
-        font-weight:bold;
-        color:#0F172A;
-        text-align:center;
-    }
+/* Section Heading */
+.section-title{
+    font-size:28px;
+    font-weight:bold;
+    color:#2563EB;
+    margin-bottom:15px;
+}
 
-    /* Hero subtitle styling */
-    .hero-subtitle{
-        font-size:20px;
-        color:#475569;
-        text-align:center;
-        margin-bottom:25px;
-    }
+/* Information Card */
+.info-card{
+    background:#FFFFFF;
+    color:#111827;
+    border-radius:12px;
+    padding:20px;
+    border-left:6px solid #2563EB;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.08);
+    margin-bottom:20px;
+}
 
-    /* Feature card styling */
-    .feature-card{
-        background:white;
-        padding:20px;
-        border-radius:15px;
-        border:1px solid #E2E8F0;
-        box-shadow:0px 4px 10px rgba(0,0,0,0.08);
-        transition:0.3s;
-    }
+.info-card *{
+    color:#111827 !important;
+}
 
-    .feature-card:hover{
-        transform:translateY(-5px);
-    }
+/* Upload Area */
+.upload-box{
+    background:#F8FAFC;
+    border:2px dashed #2563EB;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+}
 
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+/* Result Card */
+.result-card{
+    background:#EFF6FF;
+    color:#111827;
+    border-radius:12px;
+    padding:18px;
+    border-left:6px solid #1D4ED8;
+    margin-bottom:15px;
+}
+
+.result-card *{
+    color:#111827 !important;
+}
+
+/* Success Card */
+.success-card{
+    background:#ECFDF5;
+    color:#111827;
+    border-left:6px solid #10B981;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.success-card *{
+    color:#111827 !important;
+}
+
+/* Warning Card */
+.warning-card{
+    background:#FEFCE8;
+    color:#111827;
+    border-left:6px solid #F59E0B;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.warning-card *{
+    color:#111827 !important;
+}
+
+/* Metric Styling */
+div[data-testid="metric-container"]{
+    background:#FFFFFF;
+    border:1px solid #E5E7EB;
+    border-radius:12px;
+    padding:15px;
+    box-shadow:0px 3px 8px rgba(0,0,0,0.08);
+}
+
+/* Buttons */
+.stButton>button{
+    width:100%;
+    border-radius:10px;
+    height:50px;
+    font-size:16px;
+    font-weight:bold;
+}
+
+/* File Uploader */
+[data-testid="stFileUploader"]{
+    border:2px dashed #2563EB;
+    border-radius:12px;
+    padding:12px;
+}
+
+/* Horizontal Rule */
+hr{
+    margin-top:25px;
+    margin-bottom:25px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # ----------------------------------------------------------
 # Hero Section
