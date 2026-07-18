@@ -52,11 +52,10 @@ if "ai_analysis_result" not in st.session_state:
     st.session_state.ai_analysis_result = None
 
 # ==========================================================
-# Custom CSS
+# Apply Custom CSS
 # ==========================================================
 
 st.markdown("""
-
 <style>
 
 /* ---------------------------------------------------------
@@ -64,9 +63,7 @@ Main Background
 --------------------------------------------------------- */
 
 .main{
-
     background:#F8FAFC;
-
 }
 
 /* ---------------------------------------------------------
@@ -74,19 +71,17 @@ Dashboard Card
 --------------------------------------------------------- */
 
 .dashboard-card{
-
-    background:white;
-
+    background:#FFFFFF;
+    color:#111827;
     padding:25px;
-
     border-radius:15px;
-
     border-left:6px solid #2563EB;
-
     box-shadow:0px 4px 12px rgba(0,0,0,0.08);
-
     margin-bottom:20px;
+}
 
+.dashboard-card *{
+    color:#111827 !important;
 }
 
 /* ---------------------------------------------------------
@@ -94,17 +89,16 @@ Information Card
 --------------------------------------------------------- */
 
 .info-card{
-
     background:#EFF6FF;
-
+    color:#111827;
     padding:18px;
-
     border-radius:12px;
-
     border-left:5px solid #2563EB;
-
     margin-bottom:15px;
+}
 
+.info-card *{
+    color:#111827 !important;
 }
 
 /* ---------------------------------------------------------
@@ -112,15 +106,10 @@ Section Title
 --------------------------------------------------------- */
 
 .section-title{
-
     color:#1E3A8A;
-
     font-size:28px;
-
     font-weight:bold;
-
     margin-top:10px;
-
 }
 
 /* ---------------------------------------------------------
@@ -128,17 +117,67 @@ Highlight Card
 --------------------------------------------------------- */
 
 .highlight-card{
-
     background:#F8FAFC;
-
+    color:#111827;
     border-radius:12px;
-
     padding:20px;
-
     border-left:5px solid #0EA5E9;
-
     margin-bottom:15px;
+}
 
+.highlight-card *{
+    color:#111827 !important;
+}
+
+/* ---------------------------------------------------------
+Success Card
+--------------------------------------------------------- */
+
+.success-card{
+    background:#ECFDF5;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #10B981;
+    margin-bottom:15px;
+}
+
+.success-card *{
+    color:#111827 !important;
+}
+
+/* ---------------------------------------------------------
+Warning Card
+--------------------------------------------------------- */
+
+.warning-card{
+    background:#FEFCE8;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #F59E0B;
+    margin-bottom:15px;
+}
+
+.warning-card *{
+    color:#111827 !important;
+}
+
+/* ---------------------------------------------------------
+Result Card
+--------------------------------------------------------- */
+
+.result-card{
+    background:#EFF6FF;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #1D4ED8;
+    margin-bottom:15px;
+}
+
+.result-card *{
+    color:#111827 !important;
 }
 
 /* ---------------------------------------------------------
@@ -146,17 +185,16 @@ Footer
 --------------------------------------------------------- */
 
 .footer{
-
     text-align:center;
-
-    color:gray;
-
+    color:#6B7280;
     padding:20px;
+}
 
+.footer *{
+    color:#6B7280 !important;
 }
 
 </style>
-
 """, unsafe_allow_html=True)
 
 # ==========================================================
