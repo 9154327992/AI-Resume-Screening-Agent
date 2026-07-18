@@ -45,16 +45,21 @@ if "admin_selected_candidate" not in st.session_state:
 st.markdown("""
 <style>
 
-/* Main Background */
+/* =========================================================
+Main Background
+========================================================= */
 
 .main{
     background:#F8FAFC;
 }
 
-/* Dashboard Card */
+/* =========================================================
+Dashboard Card
+========================================================= */
 
 .dashboard-card{
-    background:white;
+    background:#FFFFFF;
+    color:#111827;
     padding:25px;
     border-radius:15px;
     border-left:6px solid #2563EB;
@@ -62,27 +67,115 @@ st.markdown("""
     margin-bottom:20px;
 }
 
-/* Metric Card */
+.dashboard-card *{
+    color:#111827 !important;
+}
+
+/* =========================================================
+Metric Card
+========================================================= */
 
 .metric-card{
-    background:white;
+    background:#FFFFFF;
+    color:#111827;
     padding:18px;
     border-radius:15px;
     text-align:center;
     box-shadow:0px 4px 10px rgba(0,0,0,0.08);
 }
 
-/* Info Card */
+.metric-card *{
+    color:#111827 !important;
+}
+
+/* =========================================================
+Info Card
+========================================================= */
 
 .info-card{
     background:#EFF6FF;
+    color:#111827;
     padding:20px;
     border-radius:12px;
     border-left:5px solid #2563EB;
     margin-bottom:15px;
 }
 
-/* Section Title */
+.info-card *{
+    color:#111827 !important;
+}
+
+/* =========================================================
+Success Card
+========================================================= */
+
+.success-card{
+    background:#ECFDF5;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #10B981;
+    margin-bottom:15px;
+}
+
+.success-card *{
+    color:#111827 !important;
+}
+
+/* =========================================================
+Warning Card
+========================================================= */
+
+.warning-card{
+    background:#FEFCE8;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #F59E0B;
+    margin-bottom:15px;
+}
+
+.warning-card *{
+    color:#111827 !important;
+}
+
+/* =========================================================
+Danger Card
+========================================================= */
+
+.danger-card{
+    background:#FEF2F2;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #DC2626;
+    margin-bottom:15px;
+}
+
+.danger-card *{
+    color:#111827 !important;
+}
+
+/* =========================================================
+Result Card
+========================================================= */
+
+.result-card{
+    background:#EFF6FF;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #1D4ED8;
+    margin-bottom:15px;
+}
+
+.result-card *{
+    color:#111827 !important;
+}
+
+/* =========================================================
+Section Title
+========================================================= */
 
 .section-title{
     color:#1E3A8A;
@@ -90,12 +183,18 @@ st.markdown("""
     font-weight:bold;
 }
 
-/* Footer */
+/* =========================================================
+Footer
+========================================================= */
 
 .footer{
     text-align:center;
-    color:gray;
+    color:#6B7280;
     padding:25px;
+}
+
+.footer *{
+    color:#6B7280 !important;
 }
 
 </style>
