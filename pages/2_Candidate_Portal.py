@@ -29,7 +29,7 @@ st.set_page_config(
 
 # FastAPI Backend URL
 # Change this URL if running locally.
-API_BASE_URL = "https://your-render-backend.onrender.com"
+API_BASE_URL = "https://ai-resume-screening-agent-cxgp.onrender.com"
 
 # Resume Screening Endpoint
 SCREENING_API = f"{API_BASE_URL}/predict"
