@@ -778,7 +778,7 @@ else:
 
                 st.success(candidate.get("skills", "N/A"))
 
-            st.markdown("---")
+                st.markdown("---")
 
             # --------------------------------------------------
             # Generate AI Analysis
@@ -806,13 +806,13 @@ else:
 
                         if analysis_response.status_code == 200:
 
-                        st.session_state.ai_analysis_result = (
-                            analysis_response.json()
-                        )
+                            st.session_state.ai_analysis_result = (
+                                analysis_response.json()
+                            )
 
-                        st.success(
-                            "AI analysis generated successfully."
-                        )
+                            st.success(
+                                "AI analysis generated successfully."
+                            )
 
                         else:
 
@@ -837,7 +837,6 @@ else:
         )
 
 st.markdown("---")
-
 # ==========================================================
 # AI Resume Analysis Dashboard
 # ==========================================================
