@@ -204,24 +204,21 @@ Footer
 try:
 
     response = requests.get(
+    CANDIDATES_API,
+    timeout=5
+)
 
-        CANDIDATES_API,
+if response.status_code == 200:
 
-        timeout=5
+    data = response.json()
 
+    candidate_df = pd.DataFrame(
+        data.get("Candidates", [])
     )
 
-    if response.status_code == 200:
+else:
 
-        candidate_df = pd.DataFrame(
-
-            response.json()
-
-        )
-
-    else:
-
-        candidate_df = pd.DataFrame()
+    candidate_df = pd.DataFrame()
 
 except Exception:
 
@@ -445,7 +442,16 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-if candidate_df.empty:
+required_columns = [
+    "prediction",
+    "status",
+    "name",
+    "email",
+    "match_score"
+]
+
+# Handle empty or invalid API response
+if candidate_df.empty or not all(col in candidate_df.columns for col in required_columns):
 
     total_candidates = 0
     selected = 0
@@ -457,13 +463,13 @@ else:
 
     selected = len(
         candidate_df[
-            candidate_df["prediction"] == "Selected"
+            candidate_df["prediction"].astype(str).str.strip().str.lower() == "selected"
         ]
     )
 
     rejected = len(
         candidate_df[
-            candidate_df["prediction"] == "Rejected"
+            candidate_df["prediction"].astype(str).str.strip().str.lower() == "rejected"
         ]
     )
 
