@@ -809,25 +809,17 @@ else:
 
                         if analysis_response.status_code == 200:
 
-                            st.session_state.ai_analysis_result = (
+                        st.session_state.ai_analysis_result = analysis_response.json()
 
-                                analysis_response.json()
-
-                            )
-
-                            st.success(
-
-                                "AI analysis generated successfully."
-
-                            )
+                        st.success("AI analysis generated successfully.")
 
                         else:
 
                             st.error(
-
-                                "Unable to generate AI analysis."
-
+                                f"Backend Error ({analysis_response.status_code})"
                             )
+
+                            st.write(analysis_response.text)
 
                     except Exception as e:
 
