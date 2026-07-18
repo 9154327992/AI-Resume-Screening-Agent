@@ -1,4 +1,17 @@
 /* ==========================================
+   Theme Variables
+========================================== */
+
+:root{
+    --card-bg:#FFFFFF;
+    --card-text:#111827;
+    --success-bg:#ECFDF5;
+    --info-bg:#EFF6FF;
+    --warning-bg:#FEFCE8;
+    --shadow:0px 4px 10px rgba(0,0,0,0.08);
+}
+
+/* ==========================================
    AI Resume Screening Agent
    Professional Theme
 ========================================== */
@@ -107,4 +120,90 @@ footer{
 /* Menu */
 #MainMenu{
     visibility:hidden;
+}
+
+/* ==========================================
+   Custom Cards
+========================================== */
+
+.info-card{
+    background:var(--card-bg);
+    border-left:6px solid #2563EB;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:var(--shadow);
+}
+
+.result-card{
+    background:var(--info-bg);
+    border-left:6px solid #1D4ED8;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.success-card{
+    background:var(--success-bg);
+    border-left:6px solid #10B981;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.warning-card{
+    background:var(--warning-bg);
+    border-left:6px solid #F59E0B;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+/* ==========================================
+   Card Text
+========================================== */
+
+.info-card,
+.result-card,
+.success-card,
+.warning-card{
+    color:var(--card-text) !important;
+}
+
+.info-card *,
+.result-card *,
+.success-card *,
+.warning-card *{
+    color:var(--card-text) !important;
+}
+
+.info-card h1,
+.info-card h2,
+.info-card h3,
+.success-card h1,
+.success-card h2,
+.success-card h3,
+.warning-card h1,
+.warning-card h2,
+.warning-card h3,
+.result-card h1,
+.result-card h2,
+.result-card h3{
+    color:#1F3C88 !important;
+}
+
+/* ==========================================
+   Dark Mode
+========================================== */
+
+@media (prefers-color-scheme: dark){
+
+    :root{
+        --card-bg:#F9FAFB;
+        --card-text:#111827;
+        --success-bg:#D1FAE5;
+        --info-bg:#DBEAFE;
+        --warning-bg:#FEF3C7;
+    }
+
 }
