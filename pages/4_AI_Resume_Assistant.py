@@ -761,8 +761,7 @@ else:
                 st.metric(
 
                     "Confidence",
-
-                    f"{candidate['confidence']}%"
+                    f"{candidate.get('confidence', 0)}%"
 
                 )
 
@@ -770,17 +769,17 @@ else:
 
                     "Match Score",
 
-                    f"{candidate['match_score']}%"
+                    f"{candidate.get('match_score', 0)}%"
 
                 )
 
                 st.write("### 📌 Current Status")
 
-                st.success(candidate["status"])
+                st.success(candidate.get("status", "N/A"))
 
                 st.write("### 🛠 Skills")
 
-                st.success(candidate["skills"])
+                st.success(candidate.get("skills", "N/A"))
 
             st.markdown("---")
 
