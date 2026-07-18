@@ -31,18 +31,24 @@ PROJECT_VERSION = "Version 1.0"
 DEVELOPER = "Your Name"
 
 # ----------------------------------------------------------
-# Apply Custom CSS Styling
+# Apply Custom CSS
 # ----------------------------------------------------------
 
 st.markdown("""
 <style>
 
-/* Main Container */
+/* ======================================================
+Main Layout
+====================================================== */
+
 .main{
     padding-top:20px;
 }
 
-/* Section Heading */
+/* ======================================================
+Section Title
+====================================================== */
+
 .section-title{
     font-size:28px;
     font-weight:bold;
@@ -50,12 +56,15 @@ st.markdown("""
     margin-bottom:15px;
 }
 
-/* Information Card */
+/* ======================================================
+Information Card
+====================================================== */
+
 .info-card{
     background:#FFFFFF;
     color:#111827;
-    border-radius:12px;
     padding:20px;
+    border-radius:12px;
     border-left:6px solid #2563EB;
     box-shadow:0px 4px 10px rgba(0,0,0,0.08);
     margin-bottom:20px;
@@ -65,21 +74,66 @@ st.markdown("""
     color:#111827 !important;
 }
 
-/* Upload Area */
-.upload-box{
-    background:#F8FAFC;
-    border:2px dashed #2563EB;
-    border-radius:15px;
-    padding:30px;
-    text-align:center;
+/* ======================================================
+Summary Card
+====================================================== */
+
+.summary-card{
+    background:#EFF6FF;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #1D4ED8;
+    margin-bottom:15px;
 }
 
-/* Result Card */
+.summary-card *{
+    color:#111827 !important;
+}
+
+/* ======================================================
+Success Card
+====================================================== */
+
+.success-card{
+    background:#ECFDF5;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #10B981;
+    margin-bottom:15px;
+}
+
+.success-card *{
+    color:#111827 !important;
+}
+
+/* ======================================================
+Warning Card
+====================================================== */
+
+.warning-card{
+    background:#FEFCE8;
+    color:#111827;
+    padding:18px;
+    border-radius:12px;
+    border-left:6px solid #F59E0B;
+    margin-bottom:15px;
+}
+
+.warning-card *{
+    color:#111827 !important;
+}
+
+/* ======================================================
+Result Card
+====================================================== */
+
 .result-card{
     background:#EFF6FF;
     color:#111827;
-    border-radius:12px;
     padding:18px;
+    border-radius:12px;
     border-left:6px solid #1D4ED8;
     margin-bottom:15px;
 }
@@ -88,35 +142,62 @@ st.markdown("""
     color:#111827 !important;
 }
 
-/* Success Card */
-.success-card{
-    background:#ECFDF5;
+/* ======================================================
+Dashboard Card
+====================================================== */
+
+.dashboard-card{
+    background:#FFFFFF;
     color:#111827;
-    border-left:6px solid #10B981;
+    padding:20px;
     border-radius:12px;
-    padding:18px;
-    margin-bottom:15px;
+    border-left:6px solid #2563EB;
+    box-shadow:0px 3px 8px rgba(0,0,0,0.08);
+    margin-bottom:18px;
 }
 
-.success-card *{
+.dashboard-card *{
     color:#111827 !important;
 }
 
-/* Warning Card */
-.warning-card{
-    background:#FEFCE8;
+/* ======================================================
+Danger Card
+====================================================== */
+
+.danger-card{
+    background:#FEF2F2;
     color:#111827;
-    border-left:6px solid #F59E0B;
-    border-radius:12px;
     padding:18px;
+    border-radius:12px;
+    border-left:6px solid #DC2626;
     margin-bottom:15px;
 }
 
-.warning-card *{
+.danger-card *{
     color:#111827 !important;
 }
 
-/* Metric Styling */
+/* ======================================================
+Upload Box
+====================================================== */
+
+.upload-box{
+    background:#F8FAFC;
+    color:#111827;
+    border:2px dashed #2563EB;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+}
+
+.upload-box *{
+    color:#111827 !important;
+}
+
+/* ======================================================
+Metric Cards
+====================================================== */
+
 div[data-testid="metric-container"]{
     background:#FFFFFF;
     border:1px solid #E5E7EB;
@@ -125,23 +206,32 @@ div[data-testid="metric-container"]{
     box-shadow:0px 3px 8px rgba(0,0,0,0.08);
 }
 
-/* Buttons */
+/* ======================================================
+Buttons
+====================================================== */
+
 .stButton>button{
     width:100%;
-    border-radius:10px;
     height:50px;
+    border-radius:10px;
     font-size:16px;
     font-weight:bold;
 }
 
-/* File Uploader */
+/* ======================================================
+File Uploader
+====================================================== */
+
 [data-testid="stFileUploader"]{
     border:2px dashed #2563EB;
     border-radius:12px;
     padding:12px;
 }
 
-/* Horizontal Rule */
+/* ======================================================
+Horizontal Rule
+====================================================== */
+
 hr{
     margin-top:25px;
     margin-bottom:25px;
