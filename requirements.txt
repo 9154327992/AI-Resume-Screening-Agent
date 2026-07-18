@@ -4,6 +4,7 @@ uvicorn
 pandas
 numpy
 scikit-learn
+scipy
 joblib
 pdfplumber
 python-docx
