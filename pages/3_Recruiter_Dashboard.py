@@ -280,31 +280,54 @@ action1, action2, action3, action4 = st.columns(4)
 
 with action1:
 
-    st.button(
+    if st.button(
         "📄 View Candidates",
         use_container_width=True
-    )
+    ):
+        st.session_state.selected_candidate = None
+        st.success("Scroll down to the Candidate Management section.")
 
 with action2:
 
-    st.button(
+    if st.button(
         "📊 Screening Results",
         use_container_width=True
-    )
+    ):
+        st.info("Scroll down to the Recruitment Analytics section.")
 
 with action3:
 
-    st.button(
+    if st.button(
         "🤖 AI Analysis",
         use_container_width=True
-    )
+    ):
+        st.info("AI Analysis is available in the Candidate Details section.")
 
 with action4:
 
-    st.button(
+    if st.button(
         "📑 Export Report",
         use_container_width=True
-    )
+    ):
+        if candidate is not None:
+
+            report = pd.DataFrame({
+                "Field": report["Field"],
+                "Value": report["Value"]
+            })
+
+            csv = report.to_csv(index=False)
+
+            st.download_button(
+                "⬇ Download Candidate Report",
+                csv,
+                file_name=f"{candidate['name']}_Report.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+
+        else:
+            st.warning("Please select a candidate first.")
 
 st.markdown("---")
 
