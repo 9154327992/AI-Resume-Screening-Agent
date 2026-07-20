@@ -8,108 +8,87 @@
 # ==========================================================
 
 def normalize_candidate(parsed_resume):
-    """
-    Normalize candidate data so the AI assistant works with:
-
-    • Resume Parser (Name, Skills, Experience...)
-
-    • SQLite Database (name, skills, experience...)
-    """
 
     candidate = {}
 
-    # ------------------------------------------------------
+    # -----------------------------
     # Basic Information
-    # ------------------------------------------------------
+    # -----------------------------
 
     candidate["name"] = (
-        parsed_resume.get("name")
-        or parsed_resume.get("Name", "")
+        parsed_resume["name"]
+        if "name" in parsed_resume
+        else parsed_resume.get("Name", "")
     )
 
     candidate["email"] = (
-        parsed_resume.get("email")
-        or parsed_resume.get("Email", "")
+        parsed_resume["email"]
+        if "email" in parsed_resume
+        else parsed_resume.get("Email", "")
     )
 
     candidate["phone"] = (
-        parsed_resume.get("phone")
-        or parsed_resume.get("Phone", "")
+        parsed_resume["phone"]
+        if "phone" in parsed_resume
+        else parsed_resume.get("Phone", "")
     )
 
     candidate["education"] = (
-        parsed_resume.get("education")
-        or parsed_resume.get("Education", "")
+        parsed_resume["education"]
+        if "education" in parsed_resume
+        else parsed_resume.get("Education", "")
     )
 
-    # ------------------------------------------------------
+    # -----------------------------
     # Experience
-    # ------------------------------------------------------
+    # -----------------------------
 
     experience = (
-        parsed_resume.get("experience")
-        or parsed_resume.get("Experience", 0)
+        parsed_resume["experience"]
+        if "experience" in parsed_resume
+        else parsed_resume.get("Experience", 0)
     )
 
     try:
-
         candidate["experience"] = int(experience)
-
     except Exception:
-
         candidate["experience"] = 0
 
-    # ------------------------------------------------------
+    # -----------------------------
     # Skills
-    # ------------------------------------------------------
+    # -----------------------------
 
     skills = (
-        parsed_resume.get("skills")
-        or parsed_resume.get("Skills", [])
+        parsed_resume["skills"]
+        if "skills" in parsed_resume
+        else parsed_resume.get("Skills", [])
     )
 
     if isinstance(skills, str):
-
         skills = [
-
-            skill.strip()
-
-            for skill in skills.split(",")
-
-            if skill.strip()
-
+            s.strip()
+            for s in skills.split(",")
+            if s.strip()
         ]
-
-    elif skills is None:
-
-        skills = []
 
     candidate["skills"] = skills
 
-    # ------------------------------------------------------
+    # -----------------------------
     # Certifications
-    # ------------------------------------------------------
+    # -----------------------------
 
     certifications = (
-        parsed_resume.get("certifications")
-        or parsed_resume.get("Certifications", [])
+        parsed_resume["certifications"]
+        if "certifications" in parsed_resume
+        else parsed_resume.get("Certifications", [])
     )
 
     if isinstance(certifications, str):
-
         certifications = [
-
-            cert.strip()
-
-            for cert in certifications.split(",")
-
-            if cert.strip()
-
+            c.strip()
+            for c in certifications.split(",")
+            if c.strip()
         ]
-
-    elif certifications is None:
-
-        certifications = []
 
     candidate["certifications"] = certifications
 
