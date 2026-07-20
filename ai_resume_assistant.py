@@ -9,28 +9,64 @@
 
 def normalize_candidate(parsed_resume):
     """
-    Normalize candidate data so the AI assistant can work
-    with both parsed resumes and database records.
+    Normalize candidate data so the AI assistant works with:
+
+    • Resume Parser (Name, Skills, Experience...)
+
+    • SQLite Database (name, skills, experience...)
     """
 
     candidate = {}
 
-    candidate["name"] = parsed_resume.get("name", "")
+    # ------------------------------------------------------
+    # Basic Information
+    # ------------------------------------------------------
 
-    candidate["education"] = parsed_resume.get("education", "")
+    candidate["name"] = (
+        parsed_resume.get("name")
+        or parsed_resume.get("Name", "")
+    )
+
+    candidate["email"] = (
+        parsed_resume.get("email")
+        or parsed_resume.get("Email", "")
+    )
+
+    candidate["phone"] = (
+        parsed_resume.get("phone")
+        or parsed_resume.get("Phone", "")
+    )
+
+    candidate["education"] = (
+        parsed_resume.get("education")
+        or parsed_resume.get("Education", "")
+    )
+
+    # ------------------------------------------------------
+    # Experience
+    # ------------------------------------------------------
+
+    experience = (
+        parsed_resume.get("experience")
+        or parsed_resume.get("Experience", 0)
+    )
 
     try:
-        candidate["experience"] = int(
-            parsed_resume.get("experience", 0)
-        )
-    except:
+
+        candidate["experience"] = int(experience)
+
+    except Exception:
+
         candidate["experience"] = 0
 
     # ------------------------------------------------------
     # Skills
     # ------------------------------------------------------
 
-    skills = parsed_resume.get("skills", [])
+    skills = (
+        parsed_resume.get("skills")
+        or parsed_resume.get("Skills", [])
+    )
 
     if isinstance(skills, str):
 
@@ -54,7 +90,10 @@ def normalize_candidate(parsed_resume):
     # Certifications
     # ------------------------------------------------------
 
-    certifications = parsed_resume.get("certifications", [])
+    certifications = (
+        parsed_resume.get("certifications")
+        or parsed_resume.get("Certifications", [])
+    )
 
     if isinstance(certifications, str):
 
