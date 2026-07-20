@@ -30,6 +30,8 @@ from ai_resume_assistant import ai_resume_analysis
 # Import UploadFile and File
 from fastapi import UploadFile, File
 
+from typing import Any, Dict
+
 # Import Upload Module
 from upload import upload_resume
 
@@ -295,57 +297,26 @@ async def screen_resume(file: UploadFile = File(...)):
 # ==========================================================
 
 @app.post("/ai_resume_analysis")
-async def analyze_resume(file: UploadFile = File(...)):
+async def analyze_resume(candidate: Dict[str, Any]):
     """
-    Upload Resume
-            ↓
-    Extract Resume Text
-            ↓
-    Parse Resume
-            ↓
-    Generate AI Resume Analysis
+    Receive an already-parsed candidate dict from the frontend
+    and return AI-powered resume analysis.
     """
-
-    # -----------------------------------------
-    # Upload Resume
-    # -----------------------------------------
-
-    upload_result = upload_resume(file)
-
-    if upload_result["Status"] != "Success":
-
-        return upload_result
-
-    # -----------------------------------------
-    # Resume Text
-    # -----------------------------------------
-
-    resume_text = upload_result["Resume_Text"]
-
-    # -----------------------------------------
-    # Parse Resume
-    # -----------------------------------------
-
-    parsed_resume = parse_resume(resume_text)
 
     # -----------------------------------------
     # AI Analysis
     # -----------------------------------------
 
-    analysis = ai_resume_analysis(parsed_resume)
+    analysis = ai_resume_analysis(candidate)
 
     # -----------------------------------------
     # Return Response
     # -----------------------------------------
 
     return {
-
         "Status": "Success",
-
-        "Candidate": parsed_resume,
-
+        "Candidate": candidate,
         "AI Analysis": analysis
-
     }
 
 # ==========================================================
