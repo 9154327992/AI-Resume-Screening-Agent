@@ -1524,41 +1524,53 @@ generate_ai = st.button(
 
 if generate_ai:
 
-    uploaded_file = st.session_state.uploaded_file
-
     try:
 
         with st.spinner("Generating AI Resume Analysis..."):
 
-            files = {
-                "file": (
-                    uploaded_file.name,
-                    uploaded_file.getvalue(),
-                    uploaded_file.type
+            if not st.session_state.analysis_completed:
+
+                st.warning(
+                    "Please complete AI Resume Screening first."
                 )
-            }
-
-            response = requests.post(
-                AI_ANALYSIS_API,
-                files=files,
-                timeout=120
-            )
-
-            if response.status_code == 200:
-
-                ai_result = response.json()
-
-                st.session_state.ai_result = ai_result
-
-                st.success("✅ AI Resume Analysis Generated Successfully.")
 
             else:
 
-                st.error(
-                    f"Backend Error : {response.status_code}"
+                candidate = st.session_state.analysis_result.get(
+                    "Candidate",
+                    {}
                 )
 
-                st.write(response.text)
+                response = requests.post(
+
+                    AI_ANALYSIS_API,
+
+                    json=candidate,
+
+                    timeout=120
+
+                )
+
+                if response.status_code == 200:
+
+                    response_data = response.json()
+
+                    st.session_state.ai_result = response_data.get(
+                        "AI Analysis",
+                        {}
+                    )
+
+                    st.success(
+                        "✅ AI Resume Analysis Generated Successfully."
+                    )
+
+                else:
+
+                    st.error(
+                        f"Backend Error : {response.status_code}"
+                    )
+
+                    st.write(response.text)
 
     except Exception as e:
 
@@ -1572,10 +1584,7 @@ st.markdown("---")
 
 if "ai_result" in st.session_state:
 
-    analysis = st.session_state.ai_result.get(
-        "AI Analysis",
-        {}
-    )
+    analysis = st.session_state.ai_result
 
     # ------------------------------------------------------
     # Resume Summary
