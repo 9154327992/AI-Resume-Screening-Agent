@@ -3,29 +3,102 @@
 # AI Resume Assistant
 # ==========================================================
 
+# ==========================================================
+# Normalize Candidate Data
+# ==========================================================
+
+def normalize_candidate(parsed_resume):
+    """
+    Normalize candidate data so the AI assistant can work
+    with both parsed resumes and database records.
+    """
+
+    candidate = {}
+
+    candidate["name"] = parsed_resume.get("name", "")
+
+    candidate["education"] = parsed_resume.get("education", "")
+
+    try:
+        candidate["experience"] = int(
+            parsed_resume.get("experience", 0)
+        )
+    except:
+        candidate["experience"] = 0
+
+    # ------------------------------------------------------
+    # Skills
+    # ------------------------------------------------------
+
+    skills = parsed_resume.get("skills", [])
+
+    if isinstance(skills, str):
+
+        skills = [
+
+            skill.strip()
+
+            for skill in skills.split(",")
+
+            if skill.strip()
+
+        ]
+
+    elif skills is None:
+
+        skills = []
+
+    candidate["skills"] = skills
+
+    # ------------------------------------------------------
+    # Certifications
+    # ------------------------------------------------------
+
+    certifications = parsed_resume.get("certifications", [])
+
+    if isinstance(certifications, str):
+
+        certifications = [
+
+            cert.strip()
+
+            for cert in certifications.split(",")
+
+            if cert.strip()
+
+        ]
+
+    elif certifications is None:
+
+        certifications = []
+
+    candidate["certifications"] = certifications
+
+    return candidate
+
 
 # ==========================================================
 # Resume Summary
 # ==========================================================
 
-def generate_resume_summary(parsed_resume):
+def generate_resume_summary(candidate):
 
     summary = f"""
-Candidate {parsed_resume['Name']} has
+Candidate {candidate['name']} has
 
-{parsed_resume['Experience']} years of experience.
+{candidate['experience']} years of experience.
 
 Educational Qualification:
 
-{parsed_resume['Education']}
+{candidate['education']}
 
 Technical Skills:
 
-{', '.join(parsed_resume['Skills'])}
+{", ".join(candidate["skills"]) if candidate["skills"] else "Not Available"}
 
 Certifications:
 
-{', '.join(parsed_resume['Certifications'])}
+{", ".join(candidate["certifications"]) if candidate["certifications"] else "Not Available"}
 
 The candidate demonstrates relevant technical knowledge
 and is suitable for technical screening.
@@ -38,46 +111,58 @@ and is suitable for technical screening.
 # Match Score
 # ==========================================================
 
-def calculate_match_score(parsed_resume):
+def calculate_match_score(candidate):
 
     score = 50
 
-    score += parsed_resume["Experience"] * 5
+    score += candidate["experience"] * 5
 
-    score += len(parsed_resume["Skills"]) * 2
+    score += len(candidate["skills"]) * 2
 
-    score += len(parsed_resume["Certifications"]) * 3
+    score += len(candidate["certifications"]) * 3
 
-    if score > 100:
-        score = 100
-
-    return score
+    return min(score, 100)
 
 
 # ==========================================================
 # Skill Gap Analysis
 # ==========================================================
 
-def skill_gap_analysis(parsed_resume):
+def skill_gap_analysis(candidate):
 
     required_skills = [
 
         "Python",
+
         "SQL",
+
         "Machine Learning",
+
         "Docker",
+
         "Git",
+
         "AWS",
+
         "Power BI",
+
         "Excel"
 
     ]
 
     gaps = []
 
+    candidate_skills = {
+
+        skill.lower()
+
+        for skill in candidate["skills"]
+
+    }
+
     for skill in required_skills:
 
-        if skill not in parsed_resume["Skills"]:
+        if skill.lower() not in candidate_skills:
 
             gaps.append(skill)
 
@@ -88,41 +173,49 @@ def skill_gap_analysis(parsed_resume):
 # Interview Questions
 # ==========================================================
 
-def generate_interview_questions(parsed_resume):
+def generate_interview_questions(candidate):
 
     questions = []
 
-    if "Python" in parsed_resume["Skills"]:
+    skills = {
+
+        skill.lower()
+
+        for skill in candidate["skills"]
+
+    }
+
+    if "python" in skills:
 
         questions.append(
             "Explain Python decorators."
         )
 
-    if "SQL" in parsed_resume["Skills"]:
+    if "sql" in skills:
 
         questions.append(
             "Write a SQL query to find duplicate records."
         )
 
-    if "Machine Learning" in parsed_resume["Skills"]:
+    if "machine learning" in skills:
 
         questions.append(
             "Explain Bias vs Variance."
         )
 
-    if "Power BI" in parsed_resume["Skills"]:
+    if "power bi" in skills:
 
         questions.append(
             "Explain Power BI dashboards."
         )
 
-    if "AWS" in parsed_resume["Skills"]:
+    if "aws" in skills:
 
         questions.append(
             "Explain AWS EC2."
         )
 
-    if len(questions) == 0:
+    if not questions:
 
         questions.append(
             "Tell us about yourself."
@@ -158,13 +251,15 @@ def hr_recommendation(score):
 # Email Draft
 # ==========================================================
 
-def generate_email(parsed_resume, recommendation):
+def generate_email(candidate, recommendation):
 
-    if recommendation == "Highly Recommended":
+    if recommendation in [
 
-        status = "shortlisted"
+        "Highly Recommended",
 
-    elif recommendation == "Recommended":
+        "Recommended"
+
+    ]:
 
         status = "shortlisted"
 
@@ -173,10 +268,9 @@ def generate_email(parsed_resume, recommendation):
         status = "under review"
 
     email = f"""
-
 Subject: Recruitment Update
 
-Dear {parsed_resume['Name']},
+Dear {candidate['name']},
 
 Thank you for applying.
 
@@ -188,7 +282,6 @@ regarding the next steps.
 Regards,
 
 HR Team
-
 """
 
     return email.strip()
@@ -200,17 +293,19 @@ HR Team
 
 def ai_resume_analysis(parsed_resume):
 
-    summary = generate_resume_summary(parsed_resume)
+    candidate = normalize_candidate(parsed_resume)
 
-    score = calculate_match_score(parsed_resume)
+    summary = generate_resume_summary(candidate)
 
-    gaps = skill_gap_analysis(parsed_resume)
+    score = calculate_match_score(candidate)
 
-    questions = generate_interview_questions(parsed_resume)
+    gaps = skill_gap_analysis(candidate)
+
+    questions = generate_interview_questions(candidate)
 
     recommendation = hr_recommendation(score)
 
-    email = generate_email(parsed_resume, recommendation)
+    email = generate_email(candidate, recommendation)
 
     return {
 
