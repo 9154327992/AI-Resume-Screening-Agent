@@ -709,7 +709,9 @@ else:
 
         if response.status_code == 200:
 
-            candidate = response.json()
+            data = response.json()
+
+            candidate = data.get("Candidate", {})
 
             st.write(candidate)
 
@@ -1200,17 +1202,19 @@ else:
 
             if response.status_code == 200:
 
-                candidate = response.json()
+                data = response.json()
 
-                if candidate["skills"]:
+                candidate = data.get("Candidate", {})
+
+                if candidate.get("skills"):
 
                     strengths.append("Relevant technical skills identified")
 
-                if candidate["experience"]:
+                if candidate.get("experience"):
 
                     strengths.append("Professional experience available")
 
-                if candidate["education"]:
+                if candidate.get("education"):
 
                     strengths.append("Educational qualifications provided")
 
@@ -1678,7 +1682,9 @@ else:
 
             if response.status_code == 200:
 
-                candidate = response.json()
+                data = response.json()
+
+                candidate = data.get("Candidate", {})
 
         except Exception:
 
