@@ -440,6 +440,16 @@ def update_candidate_status(candidate_id, status):
 
     connection.commit()
 
+    print("Rows inserted:", cursor.rowcount)
+
+    cursor.execute("SELECT COUNT(*) FROM candidates")
+
+    total = cursor.fetchone()[0]
+
+    print("Total candidates in database:", total)
+
+    connection.close()
+
     # ------------------------------------------------------
     # Check Whether Record Exists
     # ------------------------------------------------------
