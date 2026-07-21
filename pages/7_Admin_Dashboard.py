@@ -567,7 +567,15 @@ if st.session_state.admin_selected_candidate is not None:
 
         if response.status_code == 200:
 
-            candidate = response.json()
+            data = response.json()
+
+            candidate = data.get(
+
+                "Candidate",
+
+                {}
+                
+            )
 
             # --------------------------------------------------
             # Candidate Information
