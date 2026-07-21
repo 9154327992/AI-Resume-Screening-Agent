@@ -210,9 +210,13 @@ try:
 
     if response.status_code == 200:
 
-        candidates = response.json()
+        data = response.json()
 
-        candidate_df = pd.DataFrame(candidates)
+        candidate_df = pd.DataFrame(
+
+            data.get("Candidates", [])
+            
+        )
 
     else:
 
