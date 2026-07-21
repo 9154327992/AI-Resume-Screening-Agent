@@ -26,7 +26,7 @@ st.set_page_config(
 # Backend API Configuration
 # ==========================================================
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = "https://ai-resume-screening-agent-cxgp.onrender.com"
 
 CANDIDATES_API = f"{API_URL}/candidates"
 CANDIDATE_API = f"{API_URL}/candidate"
