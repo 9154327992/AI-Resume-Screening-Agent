@@ -8,6 +8,7 @@
 # ----------------------------------------------------------
 
 import sqlite3
+import os
 
 # ----------------------------------------------------------
 # Database Name
@@ -28,7 +29,13 @@ def get_connection():
             Active database connection object.
     """
 
-    connection = sqlite3.connect(DATABASE_NAME)
+    database_path = os.path.abspath(DATABASE_NAME)
+
+    print("========== DATABASE PATH ==========")
+    print(database_path)
+    print("Current Working Directory:", os.getcwd())
+
+    connection = sqlite3.connect(database_path)
 
     return connection
 
