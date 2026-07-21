@@ -164,7 +164,12 @@ def insert_candidate(
     # ------------------------------------------------------
     # Insert Candidate Record
     # ------------------------------------------------------
-
+    print("========== INSERT CANDIDATE ==========")
+    print(parsed_resume)
+    print(prediction)
+    print(confidence)
+    print(match_score)
+    print(recommendation)
     cursor.execute("""
 
         INSERT INTO candidates (
