@@ -4,6 +4,42 @@ AI Resume Screening Agent
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
 
+***Table of Contents:***
+
+- Project Overview
+
+- Features
+
+- Workflow
+
+- Machine Learning Model
+
+- Technology Stack
+
+- Project Structure
+
+- Installation
+
+- Running the Project
+
+- Dataset
+
+- Application Modules
+
+- Results
+
+- Performance
+
+- Future Enhancements
+
+- Acknowledgements
+
+- Project Summary
+
+- Author
+
+------------------------------------------------------------------------------------------------------------------------------------
+
 ***Project Overview:***
 
 The AI Resume Screening Agent is an intelligent recruitment system that automates the resume screening process using Machine Learning and Artificial Intelligence. It helps recruiters analyze resumes, predict candidate selection, generate AI-based resume summaries, identify skill gaps, create interview questions, and provide hiring recommendations through an interactive web application.
@@ -145,6 +181,28 @@ Decision Tree Classifier
 ------------------------------------------------------------------------------------------------------------------------------------
 
 ***Technology Stack:***
+
+Database
+
+- SQLite
+
+Deployment
+
+- Render
+
+- Streamlit Community Cloud
+
+Natural Language Processing
+
+- spaCy
+
+- Regular Expressions
+
+Resume Parsing
+
+- PyMuPDF
+
+- python-docx
 
 Frontend
 
@@ -435,6 +493,22 @@ Candidate Portal:
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
+***Performance:***
+
+- Dataset Size: ~11,000 resumes
+
+- Machine Learning Algorithm: Decision Tree
+
+- Feature Extraction: TF-IDF
+
+- Backend Framework: FastAPI
+
+- Frontend Framework: Streamlit
+
+- Database: SQLite
+
+------------------------------------------------------------------------------------------------------------------------------------
+
 ***Future Enhancements:***
 
 - MySQL/PostgreSQL Database Integration
@@ -452,6 +526,54 @@ Candidate Portal:
 - Cloud Deployment
 
 - Large Language Model (LLM) Integration
+
+- Role-Based Authentication
+
+- Resume Recommendation Engine
+
+- Multiple Job Profiles
+
+- AI Chat Assistant
+
+- Cloud Database
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+***Acknowledgements:***
+
+- FastAPI
+
+- Streamlit
+
+- Scikit-learn
+
+- spaCy
+
+- Render
+
+- Streamlit Community Cloud
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+***Project Summary:***
+
+✔ AI-Powered Resume Screening
+
+✔ Machine Learning Based Candidate Prediction
+
+✔ AI Resume Analysis
+
+✔ Recruiter Dashboard
+
+✔ Analytics Dashboard
+
+✔ Reports Dashboard
+
+✔ Admin Dashboard
+
+✔ Cloud Deployment
+
+✔ End-to-End Recruitment Workflow
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
