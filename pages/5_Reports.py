@@ -769,7 +769,12 @@ else:
 
         if response.status_code == 200:
 
-            candidate = response.json()
+            data = response.json()
+
+            candidate = data.get(
+                "Candidate",
+                {}
+            )
 
             st.markdown("---")
 
