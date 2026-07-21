@@ -287,7 +287,7 @@ python -m uvicorn backend:app --reload
 
 **Backend URL**
 
-https://ai-resume-screening-agent-s1uy.onrender.com
+https://ai-resume-screening-agent-cxgp.onrender.com/
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
