@@ -808,8 +808,13 @@ else:
 
                         if analysis_response.status_code == 200:
 
+                            response_data = analysis_response.json()
+
                             st.session_state.ai_analysis_result = (
-                                analysis_response.json()
+                                response_data.get(
+                                    "AI Analysis",
+                                    {}
+                                )
                             )
 
                             st.success(
